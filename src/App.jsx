@@ -62,12 +62,23 @@ function HomePage() {
 
       <main>
         <section className="home-hero" id="home" aria-labelledby="home-title">
-          <HeroHoverEffect imageUrl="/bg.jpg" />
+          <video
+            className="home-hero__video"
+            autoPlay
+            muted
+            loop
+            playsInline
+            preload="auto"
+            poster="/bg.jpg"
+            aria-hidden="true"
+          >
+            <source src="/hero-video.mp4" type="video/mp4" />
+          </video>
+          <HeroHoverEffect imageUrl="/bg.jpg" videoUrl="/hero-video.mp4" />
           <div className="home-hero__content">
-            <p className="section-kicker" id="home-title">Pasifika-led charity in Kaitaia</p>
+            <p className="section-kicker" id="home-title">Pasifika-Led in Te Hiku</p>
             <p className="home-hero__lede">
-              Empowering our community through culturally rooted programmes, practical support, and spaces where Pasifika families can belong.
-            </p>
+              Empowering our community through cultural innovation, practical support, and spaces where we can build the future.</p>
             <div className="home-hero__actions">
               <a className="button button--primary" href="#programmes">Our programmes</a>
               <a className="button button--ghost" href="#contact">Contact us</a>

@@ -72,7 +72,7 @@ const fragmentShader = `
   }
 `
 
-export default function HeroHoverEffect({ imageUrl }) {
+export default function HeroHoverEffect({ imageUrl, videoUrl }) {
   const mountRef = useRef(null)
 
   useEffect(() => {
@@ -122,11 +122,30 @@ export default function HeroHoverEffect({ imageUrl }) {
       const mesh = new THREE.Mesh(new THREE.PlaneGeometry(2, 2), material)
       scene.add(mesh)
 
-      const textureLoader = new THREE.TextureLoader()
-      const texture = textureLoader.load(imageUrl, (loadedTexture) => {
-        const image = loadedTexture.image
-        uniforms.uImageResolution.value.set(image.naturalWidth || image.width, image.naturalHeight || image.height)
-      })
+      let video = null
+      let texture = null
+
+      if (videoUrl) {
+        video = document.createElement('video')
+        video.src = videoUrl
+        video.muted = true
+        video.loop = true
+        video.playsInline = true
+        video.autoplay = true
+        video.preload = 'auto'
+        video.addEventListener('loadedmetadata', () => {
+          uniforms.uImageResolution.value.set(video.videoWidth || 16, video.videoHeight || 9)
+        })
+        video.play().catch(() => {})
+        texture = new THREE.VideoTexture(video)
+      } else {
+        const textureLoader = new THREE.TextureLoader()
+        texture = textureLoader.load(imageUrl, (loadedTexture) => {
+          const image = loadedTexture.image
+          uniforms.uImageResolution.value.set(image.naturalWidth || image.width, image.naturalHeight || image.height)
+        })
+      }
+
       texture.colorSpace = THREE.SRGBColorSpace
       texture.minFilter = THREE.LinearFilter
       texture.magFilter = THREE.LinearFilter
@@ -200,6 +219,11 @@ export default function HeroHoverEffect({ imageUrl }) {
         hero.removeEventListener('pointermove', handlePointerMove)
         hero.removeEventListener('pointerleave', handlePointerLeave)
         hero.classList.remove('hero--fx-active')
+        if (video) {
+          video.pause()
+          video.removeAttribute('src')
+          video.load()
+        }
         texture.dispose()
         material.dispose()
         mesh.geometry.dispose()
@@ -212,7 +236,7 @@ export default function HeroHoverEffect({ imageUrl }) {
       disposed = true
       cleanupThree()
     }
-  }, [imageUrl])
+  }, [imageUrl, videoUrl])
 
   return <div className="hero-fx" ref={mountRef} aria-hidden="true" />
 }
