@@ -1,0 +1,595 @@
+:root {
+  --pasifika-ink: #17201e;
+  --pasifika-cream: #fff8ec;
+  --pasifika-sea: #0f6f78;
+  --pasifika-leaf: #315c35;
+  --pasifika-sun: #f0b64a;
+  --pasifika-coral: #c94f3d;
+  --pasifika-earth: #6b4b34;
+  --pasifika-line: rgba(23, 32, 30, 0.14);
+}
+
+.pasifika-body {
+  min-height: 100vh;
+  margin: 0;
+  background: var(--pasifika-cream);
+  color: var(--pasifika-ink);
+  font-family: Inter, system-ui, Segoe UI, Roboto, Helvetica, Arial, sans-serif;
+}
+
+.pasifika-header {
+  position: absolute;
+  z-index: 4;
+  top: 0;
+  left: 0;
+  right: 0;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 18px;
+  padding: 22px clamp(18px, 4vw, 56px);
+}
+
+.pasifika-home-link,
+.pasifika-nav a {
+  color: #fffdf7;
+  text-decoration: none;
+  font-weight: 800;
+  text-shadow: 0 2px 10px rgba(0, 0, 0, 0.35);
+}
+
+.pasifika-home-link {
+  display: inline-flex;
+  align-items: center;
+}
+
+.pasifika-header__logo {
+  height: 40px;
+  width: auto;
+  filter: drop-shadow(0 2px 10px rgba(0, 0, 0, 0.35));
+}
+
+.pasifika-nav {
+  display: flex;
+  align-items: center;
+  gap: 18px;
+  font-size: 0.92rem;
+}
+
+.pasifika-hero {
+  min-height: min(680px, 72vh);
+  display: flex;
+  align-items: flex-end;
+  padding: 120px clamp(18px, 5vw, 72px) 54px;
+  color: #fffdf7;
+  background:
+    linear-gradient(90deg, rgba(9, 25, 24, 0.82) 0%, rgba(9, 25, 24, 0.52) 42%, rgba(9, 25, 24, 0.18) 100%),
+    linear-gradient(180deg, rgba(9, 25, 24, 0.12) 0%, rgba(9, 25, 24, 0.58) 100%),
+    url("/pasifika-hero.png") center / cover no-repeat;
+}
+
+.pasifika-hero__content {
+  width: min(760px, 100%);
+}
+
+.pasifika-kicker {
+  margin: 0 0 10px;
+  color: var(--pasifika-sun);
+  font-size: 0.78rem;
+  font-weight: 900;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+}
+
+.pasifika-hero h1 {
+  margin: 0;
+  font-size: clamp(4.2rem, 13vw, 9rem);
+  line-height: 0.88;
+  letter-spacing: 0;
+}
+
+.pasifika-lede {
+  max-width: 650px;
+  margin: 20px 0 0;
+  color: rgba(255, 253, 247, 0.88);
+  font-size: clamp(1.04rem, 2.2vw, 1.28rem);
+  line-height: 1.55;
+}
+
+.pasifika-hero__cta,
+.language-card__link,
+.language-card__calendar,
+.ceremony-source__link {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 44px;
+  border: 0;
+  border-radius: 8px;
+  cursor: pointer;
+  font: inherit;
+  font-weight: 900;
+  text-decoration: none;
+}
+
+.pasifika-hero__cta {
+  margin-top: 26px;
+  padding: 0 22px;
+  background: var(--pasifika-sun);
+  color: #201409;
+}
+
+.pasifika-strip {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  border-top: 5px solid var(--pasifika-coral);
+  border-bottom: 1px solid var(--pasifika-line);
+  background:
+    linear-gradient(135deg, rgba(15, 111, 120, 0.08), transparent 40%),
+    #fffdf7;
+}
+
+.pasifika-strip > div {
+  min-width: 0;
+  padding: 20px clamp(18px, 4vw, 56px);
+  border-right: 1px solid var(--pasifika-line);
+}
+
+.pasifika-strip > div:last-child {
+  border-right: 0;
+}
+
+.pasifika-strip span {
+  display: block;
+  margin-bottom: 6px;
+  color: #66706d;
+  font-size: 0.78rem;
+  font-weight: 900;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+}
+
+.pasifika-strip strong {
+  display: block;
+  font-size: clamp(1rem, 2vw, 1.24rem);
+  line-height: 1.25;
+}
+
+.pasifika-strip__link {
+  color: var(--pasifika-sea);
+  text-decoration: none;
+}
+
+.pasifika-strip__link:hover {
+  text-decoration: underline;
+}
+
+.pasifika-section {
+  max-width: 1180px;
+  margin: 0 auto;
+  padding: 58px clamp(18px, 4vw, 42px);
+}
+
+.pasifika-section--feature {
+  padding-top: 20px;
+}
+
+.pasifika-section__heading {
+  max-width: 740px;
+  margin-bottom: 22px;
+}
+
+.pasifika-section__heading h2 {
+  margin: 0;
+  color: var(--pasifika-ink);
+  font-size: clamp(2rem, 5vw, 4rem);
+  line-height: 0.98;
+  letter-spacing: 0;
+}
+
+.language-grid,
+.phrase-grid {
+  display: grid;
+  gap: 18px;
+}
+
+.language-grid {
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+}
+
+.language-card {
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+  padding: clamp(18px, 3vw, 28px);
+  border: 1px solid var(--pasifika-line);
+  border-top: 8px solid var(--week-accent, var(--pasifika-sea));
+  border-radius: 8px;
+  background:
+    linear-gradient(135deg, color-mix(in srgb, var(--week-accent, var(--pasifika-sea)) 10%, transparent), transparent 46%),
+    #fffdf7;
+  box-shadow: 0 18px 50px rgba(45, 35, 22, 0.08);
+}
+
+.language-card__top {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 14px;
+}
+
+.language-card__month {
+  margin: 0 0 10px;
+  color: var(--week-accent, var(--pasifika-sea));
+  font-size: 0.78rem;
+  font-weight: 900;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+}
+
+.language-card__label {
+  display: inline-flex;
+  min-height: 28px;
+  align-items: center;
+  padding: 0 10px;
+  border-radius: 8px;
+  background: color-mix(in srgb, var(--week-accent, var(--pasifika-sea)) 14%, #fffdf7);
+  color: var(--week-accent, var(--pasifika-sea));
+  font-size: 0.72rem;
+  font-weight: 900;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+
+.language-card h3 {
+  margin: 0;
+  color: var(--pasifika-ink);
+  font-size: clamp(1.8rem, 4vw, 3rem);
+  line-height: 0.98;
+  letter-spacing: 0;
+}
+
+.language-card__native {
+  margin: 6px 0 0;
+  color: var(--week-accent, var(--pasifika-sea));
+  font-size: 1rem;
+  font-weight: 900;
+}
+
+.language-card__dates {
+  color: #4f5a56;
+  font-size: 1.02rem;
+  font-weight: 800;
+}
+
+.language-card__theme {
+  flex: 1 1 auto;
+  margin: 0;
+  max-width: 68ch;
+  color: #37413e;
+  font-size: 1.05rem;
+  line-height: 1.58;
+}
+
+.language-card__translation {
+  display: block;
+  margin-top: 8px;
+  color: #65706c;
+  font-weight: 800;
+}
+
+.language-card__actions {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 10px;
+  margin-top: auto;
+  padding-top: 2px;
+}
+
+.language-card__actions > * {
+  width: 100%;
+  min-height: 42px;
+  padding: 10px 18px;
+  text-align: center;
+  line-height: 1.2;
+}
+
+.language-card__action {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 8px;
+  border: 1px solid transparent;
+  font-weight: 900;
+  text-decoration: none;
+  transition: transform 140ms ease, background-color 140ms ease, color 140ms ease, border-color 140ms ease;
+}
+
+.language-card__action:hover {
+  transform: translateY(-1px);
+}
+
+.language-card__action--primary {
+  background: var(--week-accent, var(--pasifika-sea));
+  color: #fffdf7;
+}
+
+.language-card__action--secondary {
+  background: color-mix(in srgb, var(--week-accent, var(--pasifika-sea)) 88%, #201409);
+  color: #fffdf7;
+}
+
+.language-card__action--muted {
+  background: color-mix(in srgb, var(--week-accent, var(--pasifika-sea)) 82%, #fffdf7);
+  color: #fffdf7;
+}
+
+.language-card__action--outline {
+  border-color: color-mix(in srgb, var(--week-accent, var(--pasifika-sea)) 45%, transparent);
+  background: transparent;
+  color: var(--week-accent, var(--pasifika-sea));
+}
+
+.pasifika-section--ceremony {
+  max-width: none;
+  padding-inline: clamp(18px, 4vw, 56px);
+  background:
+    linear-gradient(135deg, rgba(49, 92, 53, 0.09), transparent 34%),
+    linear-gradient(315deg, rgba(201, 79, 61, 0.08), transparent 40%),
+    #f7eddc;
+  border-top: 1px solid var(--pasifika-line);
+  border-bottom: 1px solid var(--pasifika-line);
+}
+
+.pasifika-section--ceremony .pasifika-section__heading {
+  max-width: 1180px;
+  margin-inline: auto;
+}
+
+.ceremony-toggle {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 46px;
+  margin-top: 18px;
+  padding: 0 18px;
+  border: 0;
+  border-radius: 999px;
+  background: var(--pasifika-coral);
+  color: #fffdf7;
+  cursor: pointer;
+  font: inherit;
+  font-weight: 900;
+}
+
+.ceremony-toggle:hover {
+  background: #a93f31;
+}
+
+.ceremony-content {
+  margin-top: 24px;
+}
+
+.ceremony-layout {
+  max-width: 1180px;
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: minmax(280px, 0.9fr) minmax(320px, 1.1fr);
+  gap: 18px;
+  align-items: start;
+}
+
+.ceremony-panel {
+  display: grid;
+  gap: 18px;
+  padding: clamp(18px, 3vw, 26px);
+  border: 1px solid rgba(107, 75, 52, 0.18);
+  border-radius: 8px;
+  background: rgba(255, 253, 247, 0.86);
+  box-shadow: 0 18px 50px rgba(45, 35, 22, 0.08);
+}
+
+.ceremony-panel__heading {
+  display: grid;
+  gap: 6px;
+}
+
+.ceremony-panel__heading span {
+  color: var(--pasifika-coral);
+  font-size: 0.75rem;
+  font-weight: 900;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+}
+
+.ceremony-panel__heading h3 {
+  margin: 0;
+  color: var(--pasifika-ink);
+  font-size: clamp(1.7rem, 4vw, 2.8rem);
+  line-height: 1;
+}
+
+.agenda-list {
+  display: grid;
+  gap: 12px;
+}
+
+.agenda-item {
+  display: grid;
+  grid-template-columns: 38px minmax(0, 1fr);
+  gap: 12px;
+  padding-bottom: 12px;
+  border-bottom: 1px solid rgba(107, 75, 52, 0.14);
+}
+
+.agenda-item:last-child {
+  padding-bottom: 0;
+  border-bottom: 0;
+}
+
+.agenda-item__number {
+  width: 38px;
+  height: 38px;
+  display: grid;
+  place-items: center;
+  border-radius: 50%;
+  background: var(--pasifika-sea);
+  color: #fffdf7;
+  font-weight: 900;
+}
+
+.agenda-item strong {
+  display: block;
+  color: var(--pasifika-ink);
+  font-size: 1.02rem;
+}
+
+.agenda-item p {
+  margin: 5px 0 0;
+  color: #52605c;
+  line-height: 1.45;
+}
+
+.agenda-scripture-link {
+  color: var(--pasifika-sea);
+  font-weight: 800;
+  text-decoration-thickness: 2px;
+  text-underline-offset: 0.12em;
+}
+
+.agenda-scripture-link:hover {
+  color: var(--pasifika-coral);
+}
+
+.hymn-stack {
+  display: grid;
+  gap: 14px;
+}
+
+.hymn-card {
+  padding: 18px;
+  border: 1px solid rgba(15, 111, 120, 0.16);
+  border-left: 6px solid var(--pasifika-sea);
+  border-radius: 8px;
+  background: #fffdf7;
+}
+
+.hymn-card h4 {
+  margin: 0;
+  color: var(--pasifika-sea);
+  font-size: clamp(1.25rem, 3vw, 1.8rem);
+  line-height: 1.1;
+}
+
+.hymn-card__subtitle {
+  display: inline-flex;
+  margin: 10px 0 0;
+  padding: 4px 8px;
+  background: #fff06a;
+  color: #111;
+  font-weight: 900;
+}
+
+.hymn-card__verses {
+  column-count: 2;
+  column-gap: 28px;
+  margin-top: 14px;
+}
+
+.hymn-verse {
+  break-inside: avoid;
+  margin: 0 0 14px;
+}
+
+.hymn-verse em {
+  display: inline-flex;
+  margin-bottom: 4px;
+  color: var(--pasifika-coral);
+  font-style: normal;
+  font-weight: 900;
+}
+
+.hymn-verse p {
+  margin: 0;
+  color: #24312e;
+  font-weight: 800;
+  line-height: 1.42;
+}
+
+.hymn-verse span {
+  display: block;
+}
+
+.phrase-grid {
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+}
+
+.phrase-card {
+  min-height: 150px;
+  display: grid;
+  align-content: space-between;
+  gap: 20px;
+  padding: 20px;
+  border: 1px solid var(--pasifika-line);
+  border-radius: 8px;
+  background:
+    linear-gradient(135deg, rgba(201, 79, 61, 0.12), transparent 55%),
+    #fffdf7;
+}
+
+.phrase-card strong {
+  color: var(--pasifika-coral);
+  font-size: clamp(1.25rem, 3vw, 1.7rem);
+  line-height: 1.08;
+}
+
+.phrase-card span {
+  color: #4f5a56;
+  font-weight: 800;
+}
+
+@media (max-width: 720px) {
+  .pasifika-header {
+    position: absolute;
+    align-items: flex-start;
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  .pasifika-nav {
+    width: 100%;
+    justify-content: flex-start;
+    gap: 14px;
+    font-size: 0.84rem;
+  }
+
+  .pasifika-hero {
+    min-height: 620px;
+    padding-top: 142px;
+  }
+
+  .pasifika-strip {
+    grid-template-columns: 1fr;
+  }
+
+  .pasifika-strip > div {
+    border-right: 0;
+    border-bottom: 1px solid var(--pasifika-line);
+  }
+
+  .pasifika-strip > div:last-child {
+    border-bottom: 0;
+  }
+
+  .language-card__top {
+    display: grid;
+  }
+
+  .ceremony-layout {
+    grid-template-columns: 1fr;
+  }
+
+  .hymn-card__verses {
+    column-count: 1;
+  }
+}
