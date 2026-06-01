@@ -87,14 +87,14 @@ function HomePage() {
         <section className="content-section content-section--intro" id="about">
           <div className="section-heading">
             <p className="section-kicker">About</p>
-            <h2>Community care with culture at the centre.</h2>
+            <h2>Connection through creative innovation.</h2>
           </div>
           <div className="intro-copy">
             <p>
-              Pasifika Navigators supports Pasifika people in the Far North with connection, encouragement, and local pathways to services.
+              Pasifika Navigators walks alongside individuals and families — helping them stay connected to who they are, where they come from, and where they are going.
             </p>
             <p>
-              We bring people together through culturally rooted support, language celebration, and community relationships.
+              We meet people through many pathways: talanoa around the table, generational stories passed from grandparents to grandchildren, digital tools that bridge distance, community gatherings, and one-on-one conversations that honour each person's journey. However connection happens, we show up for it.
             </p>
           </div>
         </section>
@@ -139,7 +139,6 @@ function HomePage() {
       <footer className="site-footer" id="contact">
         <div className="site-footer__intro">
           <img src={logoWhite} alt="Pasifika Navigators" />
-          <p>Reach out to us anytime for support.</p>
         </div>
         <div className="site-footer__details">
           <div>

@@ -101,7 +101,10 @@ input {
   padding: 172px clamp(18px, 5vw, 72px) 58px;
   color: #fff;
   overflow: hidden;
-  background: url("/bg.jpg") center / cover no-repeat;
+  background:
+    linear-gradient(90deg, rgba(9, 25, 24, 0.72) 0%, rgba(9, 25, 24, 0.42) 42%, rgba(9, 25, 24, 0.14) 100%),
+    linear-gradient(180deg, rgba(9, 25, 24, 0.10) 0%, rgba(9, 25, 24, 0.52) 100%),
+    url("/bg.jpg") center / cover no-repeat;
 }
 
 .hero-fx {
