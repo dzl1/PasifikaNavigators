@@ -1,6 +1,7 @@
 import { useState, useEffect, useRef } from 'react'
-import { Link, useLocation } from 'react-router-dom'
-import logo from '../data/images/logo.png'
+import { useLocation } from 'react-router-dom'
+import HeroHoverEffect from '../components/HeroHoverEffect.jsx'
+import SiteHeader from '../components/SiteHeader.jsx'
 import './PasifikaPage.css'
 
 function createCalendarUrl({ title, startDate, endDate, nativeName, theme }) {
@@ -385,19 +386,11 @@ export default function PasifikaPage() {
 
   return (
     <div className="pasifika-body">
-      <header className="pasifika-header">
-        <Link className="pasifika-home-link" to="/">
-          <img src={logo} alt="Pasifika Navigators" className="pasifika-header__logo" />
-        </Link>
-        <nav className="pasifika-nav" aria-label="Pasifika sections">
-          <a href="#weeks">Language weeks</a>
-          <a href="#opening-ceremony" onClick={() => setCeremonyOpen(true)}>Kaitaia Opening Ceremony</a>
-          <a href="#phrases">Samoan phrases</a>
-        </nav>
-      </header>
+      <SiteHeader />
 
       <main>
         <section className="pasifika-hero" aria-labelledby="pasifika-title">
+          <HeroHoverEffect imageUrl="/pasifika-hero.png" />
           <div className="pasifika-hero__content">
             <p className="pasifika-kicker">Pacific Language Weeks</p>
             <h1 id="pasifika-title">Pasifika</h1>

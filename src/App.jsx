@@ -1,103 +1,157 @@
 import { Routes, Route, Link } from 'react-router-dom'
 import PasifikaPage from './pages/PasifikaPage.jsx'
-import logo from './data/images/logo.png'
+import HeroHoverEffect from './components/HeroHoverEffect.jsx'
+import SiteHeader from './components/SiteHeader.jsx'
 import logoWhite from './data/images/logo_white.png'
 import './App.css'
 
-const apps = [
+const programmes = [
   {
-    id: 1,
-    name: 'Community Hub',
-    description: 'Connect with Pasifika communities across the region.',
-    color: '#0077b6',
-    href: '#',
+    title: 'Community Support',
+    description: 'Culturally grounded navigation, advocacy, and practical support for Pasifika families in Kaitaia.',
+    accent: '#238ca3',
   },
   {
-    id: 2,
-    name: 'Language Learning',
-    description: 'Explore and learn Pacific Island languages interactively.',
-    color: '#2a9d8f',
+    title: 'Pacific Language Weeks',
+    description: 'Celebration dates, learning links, and resources that help families keep language visible through the year.',
+    accent: '#8f11a8',
     href: '/pasifika',
   },
   {
-    id: 3,
-    name: 'Cultural Stories',
-    description: 'Discover myths, legends, and oral histories of the Pacific.',
-    color: '#e76f51',
-    href: '#',
-  },
-  {
-    id: 4,
-    name: 'Navigator Charts',
-    description: 'Traditional wayfinding maps and star navigation guides.',
-    color: '#264653',
-    href: '#',
-  },
-  {
-    id: 5,
-    name: 'Events Calendar',
-    description: 'Stay up-to-date with Pasifika festivals and gatherings.',
-    color: '#e9c46a',
-    href: '#',
-  },
-  {
-    id: 6,
-    name: 'Resource Directory',
-    description: 'Find health, education, and support services for Pacific peoples.',
-    color: '#6a4c93',
-    href: '#',
+    title: 'Connection Events',
+    description: 'Local gatherings that bring people together through faith, culture, food, music, and shared service.',
+    accent: '#c94f3d',
   },
 ]
 
-function AppCard({ app }) {
-  const isInternal = app.href.startsWith('/')
-  const cardProps = {
-    className: 'app-card',
-    style: { '--accent': app.color },
-    'aria-label': app.name,
-  }
-  const inner = (
+const stats = [
+  { label: 'Based in', value: 'Kaitaia, Aotearoa NZ' },
+  { label: 'Led by', value: 'Pasifika community' },
+  { label: 'Focused on', value: 'Culture, wellbeing, connection' },
+]
+
+function ProgrammeCard({ programme }) {
+  const content = (
     <>
-      <h2 className="app-card__name">{app.name}</h2>
-      <p className="app-card__description">{app.description}</p>
-      <span className="app-card__arrow">Explore →</span>
+      <span className="programme-card__mark" aria-hidden="true" />
+      <h3>{programme.title}</h3>
+      <p>{programme.description}</p>
+      <span className="programme-card__action">{programme.href ? 'Explore resources' : 'Learn more'}</span>
     </>
   )
-  return isInternal
-    ? <Link to={app.href} {...cardProps}>{inner}</Link>
-    : <a href={app.href} {...cardProps}>{inner}</a>
+
+  if (programme.href) {
+    return (
+      <Link className="programme-card" to={programme.href} style={{ '--accent': programme.accent }}>
+        {content}
+      </Link>
+    )
+  }
+
+  return (
+    <article className="programme-card" style={{ '--accent': programme.accent }}>
+      {content}
+    </article>
+  )
 }
 
 function HomePage() {
   return (
-    <div className="layout">
-      <header className="header">
-        <div className="header__inner">
-          <p className="header__kicker">Pacific Island communities</p>
-          <div className="header__brand">
-            <img src={logo} alt="Pasifika Navigators" className="header__logo" />
-          </div>
-          <p className="header__tagline">
-            Your gateway to Pacific Island communities, culture, and resources.
-          </p>
-        </div>
-      </header>
+    <div className="site-shell">
+      <SiteHeader />
 
-      <main className="main">
-        <section className="apps-section">
-          <p className="apps-section__kicker">Explore</p>
-          <h1 className="apps-section__heading">Applications</h1>
-          <div className="apps-grid">
-            {apps.map((app) => (
-              <AppCard key={app.id} app={app} />
+      <main>
+        <section className="home-hero" id="home" aria-labelledby="home-title">
+          <HeroHoverEffect imageUrl="/bg.jpg" />
+          <div className="home-hero__content">
+            <p className="section-kicker" id="home-title">Pasifika-led charity in Kaitaia</p>
+            <p className="home-hero__lede">
+              Empowering our community through culturally rooted programmes, practical support, and spaces where Pasifika families can belong.
+            </p>
+            <div className="home-hero__actions">
+              <a className="button button--primary" href="#programmes">Our programmes</a>
+              <a className="button button--ghost" href="#contact">Contact us</a>
+            </div>
+          </div>
+        </section>
+
+        <section className="snapshot-band" aria-label="Pasifika Navigators snapshot">
+          {stats.map((item) => (
+            <div key={item.label}>
+              <span>{item.label}</span>
+              <strong>{item.value}</strong>
+            </div>
+          ))}
+        </section>
+
+        <section className="content-section content-section--intro" id="about">
+          <div className="section-heading">
+            <p className="section-kicker">About</p>
+            <h2>Community care with culture at the centre.</h2>
+          </div>
+          <div className="intro-copy">
+            <p>
+              Pasifika Navigators supports Pasifika people in the Far North with connection, encouragement, and local pathways to services.
+            </p>
+            <p>
+              We bring people together through culturally rooted support, language celebration, and community relationships.
+            </p>
+          </div>
+        </section>
+
+        <section className="gradient-feature">
+          <div className="gradient-feature__inner">
+            <p className="section-kicker">Our purpose</p>
+            <h2>Helping families navigate support, culture, and belonging.</h2>
+            <p>
+              We walk alongside our people with respect for language, identity, and the shared strength of Pasifika communities.
+            </p>
+          </div>
+        </section>
+
+        <section className="content-section" id="programmes">
+          <div className="section-heading">
+            <p className="section-kicker">Programmes</p>
+            <h2>Support shaped for our people.</h2>
+          </div>
+          <div className="programme-grid">
+            {programmes.map((programme) => (
+              <ProgrammeCard key={programme.title} programme={programme} />
             ))}
           </div>
         </section>
+
+        <section className="join-section">
+          <div>
+            <p className="section-kicker">Join Our Journey</p>
+            <h2>Stay connected with Pasifika Navigators news.</h2>
+          </div>
+          <form className="signup-form" onSubmit={(event) => event.preventDefault()}>
+            <label htmlFor="email">Your Email</label>
+            <div className="signup-form__row">
+              <input id="email" name="email" type="email" placeholder="Enter email" />
+              <button className="button button--dark" type="submit">Send</button>
+            </div>
+          </form>
+        </section>
       </main>
 
-      <footer className="footer">
-        <img src={logoWhite} alt="Pasifika Navigators" className="footer__logo" />
-        <p>© {new Date().getFullYear()} Pasifika Navigators. All rights reserved.</p>
+      <footer className="site-footer" id="contact">
+        <div className="site-footer__intro">
+          <img src={logoWhite} alt="Pasifika Navigators" />
+          <p>Reach out to us anytime for support.</p>
+        </div>
+        <div className="site-footer__details">
+          <div>
+            <span>Email</span>
+            <a href="mailto:office@pasifikanavigators.nz">office@pasifikanavigators.nz</a>
+          </div>
+          <div>
+            <span>Phone</span>
+            <a href="tel:+64212178028">+64 21 2178028</a>
+          </div>
+        </div>
+        <p className="site-footer__copyright">© {new Date().getFullYear()} Pasifika Navigators. All rights reserved.</p>
       </footer>
     </div>
   )
