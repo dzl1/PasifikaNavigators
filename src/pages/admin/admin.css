@@ -30,6 +30,23 @@
   border-bottom: 1px solid rgba(255, 255, 255, 0.1);
 }
 
+.admin-sidebar__home-link {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 10px 20px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+  color: rgba(255, 255, 255, 0.5);
+  font-size: 0.78rem;
+  font-weight: 600;
+  text-decoration: none;
+  transition: color 140ms;
+}
+
+.admin-sidebar__home-link:hover {
+  color: rgba(255, 255, 255, 0.9);
+}
+
 .admin-sidebar__brand img {
   width: 100px;
   height: auto;
