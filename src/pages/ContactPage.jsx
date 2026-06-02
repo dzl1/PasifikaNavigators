@@ -51,6 +51,7 @@ export default function ContactPage() {
       .insert([payload])
 
     if (error) {
+      console.error('Supabase error (contact_messages insert):', error)
       setStatus('error')
       setFeedback('Something went wrong while sending your message. Please try again.')
       return

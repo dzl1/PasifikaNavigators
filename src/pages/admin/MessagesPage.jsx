@@ -27,7 +27,8 @@ export default function MessagesPage() {
     setLoading(false)
 
     if (fetchError) {
-      setError('Failed to load messages.')
+      console.error('Supabase error (contact_messages select):', fetchError)
+      setError(`Failed to load messages: ${fetchError.message} (code: ${fetchError.code})${fetchError.code === '42P01' ? ' — the contact_messages table may not exist yet. Run supabase/contact_messages.sql in your Supabase SQL editor.' : ''}`)
       return
     }
 
