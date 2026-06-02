@@ -1,4 +1,6 @@
+import { useState } from 'react'
 import { Routes, Route, Link } from 'react-router-dom'
+import ContactPage from './pages/ContactPage.jsx'
 import PasifikaPage from './pages/PasifikaPage.jsx'
 import HeroHoverEffect from './components/HeroHoverEffect.jsx'
 import SiteHeader from './components/SiteHeader.jsx'
@@ -56,6 +58,8 @@ function ProgrammeCard({ programme }) {
 }
 
 function HomePage() {
+  const [heroVideoReady, setHeroVideoReady] = useState(false)
+
   return (
     <div className="site-shell">
       <SiteHeader />
@@ -63,7 +67,7 @@ function HomePage() {
       <main>
         <section className="home-hero" id="home" aria-labelledby="home-title">
           <video
-            className="home-hero__video"
+            className={`home-hero__video${heroVideoReady ? ' home-hero__video--ready' : ''}`}
             autoPlay
             muted
             loop
@@ -71,6 +75,7 @@ function HomePage() {
             preload="auto"
             poster="/bg.jpg"
             aria-hidden="true"
+            onLoadedData={() => setHeroVideoReady(true)}
           >
             <source src="/hero-video.mp4" type="video/mp4" />
           </video>
@@ -81,7 +86,7 @@ function HomePage() {
               Empowering our community through cultural innovation, practical support, and spaces where we can build the future.</p>
             <div className="home-hero__actions">
               <a className="button button--primary" href="#programmes">Our programmes</a>
-              <a className="button button--ghost" href="#contact">Contact us</a>
+              <Link className="button button--ghost" to="/contact">Contact us</Link>
             </div>
           </div>
         </section>
@@ -172,6 +177,7 @@ export default function App() {
     <Routes>
       <Route path="/" element={<HomePage />} />
       <Route path="/pasifika" element={<PasifikaPage />} />
+      <Route path="/contact" element={<ContactPage />} />
     </Routes>
   )
 }

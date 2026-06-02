@@ -392,7 +392,7 @@ export default function PasifikaPage() {
         <section className="pasifika-hero" aria-labelledby="pasifika-title">
           <HeroHoverEffect imageUrl="/pasifika-hero.png" />
           <div className="pasifika-hero__content">
-            <p className="pasifika-kicker">Pacific Language Weeks</p>
+            <p className="pasifika-kicker">Pacific Language Weeks in Te Hiku</p>
             <h1 id="pasifika-title">Pasifika</h1>
             <p className="pasifika-lede">
               A living showcase for Pasifika language weeks, celebration dates, themes, learning resources, and official information links.

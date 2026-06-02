@@ -4,7 +4,7 @@ const navItems = [
   { label: 'Home', href: '/#home' },
   { label: 'About', href: '/#about' },
   { label: 'Programmes', href: '/#programmes' },
-  { label: 'Contact', href: '/#contact' },
+  { label: 'Contact', href: '/contact' },
 ]
 
 export default function SiteHeader() {
