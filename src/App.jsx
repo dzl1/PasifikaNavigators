@@ -2,7 +2,6 @@ import { useState } from 'react'
 import { Routes, Route, Link, Navigate } from 'react-router-dom'
 import ContactPage from './pages/ContactPage.jsx'
 import PasifikaPage from './pages/PasifikaPage.jsx'
-import HeroHoverEffect from './components/HeroHoverEffect.jsx'
 import SiteHeader from './components/SiteHeader.jsx'
 import logoWhite from './data/images/logo_white.png'
 import LoginPage from './pages/admin/LoginPage.jsx'
@@ -11,6 +10,7 @@ import DashboardPage from './pages/admin/DashboardPage.jsx'
 import MessagesPage from './pages/admin/MessagesPage.jsx'
 import PathwaysPage from './pages/admin/PathwaysPage.jsx'
 import RegisterPage from './pages/admin/RegisterPage.jsx'
+import ResetPasswordPage from './pages/admin/ResetPasswordPage.jsx'
 import ProtectedRoute from './components/ProtectedRoute.jsx'
 import { AuthProvider } from './context/AuthContext.jsx'
 import './App.css'
@@ -87,7 +87,6 @@ function HomePage() {
           >
             <source src="/hero-video.mp4" type="video/mp4" />
           </video>
-          <HeroHoverEffect imageUrl="/bg.jpg" videoUrl="/hero-video.mp4" />
           <div className="home-hero__content">
             <p className="section-kicker" id="home-title">Pasifika-Led in Te Hiku</p>
             <p className="home-hero__lede">
@@ -191,6 +190,7 @@ export default function App() {
         {/* Auth */}
         <Route path="/login" element={<LoginPage />} />
         <Route path="/register" element={<RegisterPage />} />
+        <Route path="/reset-password" element={<ResetPasswordPage />} />
         <Route
           path="/admin"
           element={

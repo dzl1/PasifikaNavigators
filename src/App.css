@@ -524,6 +524,7 @@ article.programme-card:hover {
 }
 
 .contact-hero {
+  position: relative;
   min-height: 460px;
   display: flex;
   align-items: flex-end;
@@ -532,9 +533,13 @@ article.programme-card:hover {
   background:
     linear-gradient(90deg, rgba(13, 20, 26, 0.84), rgba(19, 58, 75, 0.48)),
     url("/pasifika-hero.png") center / cover no-repeat;
+  isolation: isolate;
+  overflow: hidden;
 }
 
 .contact-hero__content {
+  position: relative;
+  z-index: 2;
   width: min(840px, 100%);
 }
 

@@ -318,6 +318,16 @@
   font-size: 0.875rem;
 }
 
+.login-form__success {
+  margin: 0;
+  padding: 10px 14px;
+  border-radius: 6px;
+  background: #ecfdf5;
+  border: 1px solid #bbf7d0;
+  color: #047857;
+  font-size: 0.875rem;
+}
+
 .login-form__submit {
   width: 100%;
   justify-content: center;
@@ -336,7 +346,17 @@
   color: var(--sea);
 }
 
-.login-card__back a:hover {
+.login-card__text-button {
+  border: 0;
+  padding: 0;
+  background: transparent;
+  color: var(--sea);
+  cursor: pointer;
+  font: inherit;
+}
+
+.login-card__back a:hover,
+.login-card__text-button:hover {
   text-decoration: underline;
 }
 

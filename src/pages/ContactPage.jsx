@@ -1,4 +1,5 @@
 import { useState } from 'react'
+import HeroHoverEffect from '../components/HeroHoverEffect.jsx'
 import SiteHeader from '../components/SiteHeader.jsx'
 import logoWhite from '../data/images/logo_white.png'
 import { isSupabaseConfigured, supabase } from '../lib/supabaseClient.js'
@@ -68,6 +69,7 @@ export default function ContactPage() {
 
       <main>
         <section className="contact-hero" aria-labelledby="contact-title">
+          <HeroHoverEffect imageUrl="/pasifika-hero.png" />
           <div className="contact-hero__content">
             <p className="section-kicker">Contact Us</p>
             <h1 id="contact-title">Visit or message Pasifika Navigators.</h1>
