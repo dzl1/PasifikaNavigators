@@ -1,10 +1,17 @@
 import { useState } from 'react'
-import { Routes, Route, Link } from 'react-router-dom'
+import { Routes, Route, Link, Navigate } from 'react-router-dom'
 import ContactPage from './pages/ContactPage.jsx'
 import PasifikaPage from './pages/PasifikaPage.jsx'
 import HeroHoverEffect from './components/HeroHoverEffect.jsx'
 import SiteHeader from './components/SiteHeader.jsx'
 import logoWhite from './data/images/logo_white.png'
+import LoginPage from './pages/admin/LoginPage.jsx'
+import AdminLayout from './pages/admin/AdminLayout.jsx'
+import DashboardPage from './pages/admin/DashboardPage.jsx'
+import MessagesPage from './pages/admin/MessagesPage.jsx'
+import PathwaysPage from './pages/admin/PathwaysPage.jsx'
+import ProtectedRoute from './components/ProtectedRoute.jsx'
+import { AuthProvider } from './context/AuthContext.jsx'
 import './App.css'
 
 const programmes = [
@@ -174,10 +181,30 @@ function HomePage() {
 
 export default function App() {
   return (
-    <Routes>
-      <Route path="/" element={<HomePage />} />
-      <Route path="/pasifika" element={<PasifikaPage />} />
-      <Route path="/contact" element={<ContactPage />} />
-    </Routes>
+    <AuthProvider>
+      <Routes>
+        <Route path="/" element={<HomePage />} />
+        <Route path="/pasifika" element={<PasifikaPage />} />
+        <Route path="/contact" element={<ContactPage />} />
+
+        {/* Admin */}
+        <Route path="/admin/login" element={<LoginPage />} />
+        <Route
+          path="/admin"
+          element={
+            <ProtectedRoute>
+              <AdminLayout />
+            </ProtectedRoute>
+          }
+        >
+          <Route index element={<DashboardPage />} />
+          <Route path="messages" element={<MessagesPage />} />
+          <Route path="pathways" element={<PathwaysPage />} />
+        </Route>
+
+        {/* Fallback */}
+        <Route path="*" element={<Navigate to="/" replace />} />
+      </Routes>
+    </AuthProvider>
   )
 }

@@ -21,3 +21,13 @@ create policy "Allow public contact message inserts"
   with check (true);
 
 grant insert on public.contact_messages to anon;
+
+-- Authenticated users (admins) can read all messages
+drop policy if exists "Admins can read contact messages" on public.contact_messages;
+
+create policy "Admins can read contact messages"
+  on public.contact_messages
+  for select
+  to authenticated
+  using (true);
+
