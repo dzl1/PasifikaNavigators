@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
 import { useAuth } from '../../context/AuthContext.jsx'
-import { supabase } from '../../lib/supabaseClient.js'
+import { isSupabaseConfigured, supabase } from '../../lib/supabaseClient.js'
 
 export default function DashboardPage() {
   const { session } = useAuth()
@@ -9,6 +9,11 @@ export default function DashboardPage() {
 
   useEffect(() => {
     async function fetchCounts() {
+      if (!isSupabaseConfigured) {
+        setCounts({ messages: 0, pathways: 0 })
+        return
+      }
+
       const [{ count: messages }, { count: pathways }] = await Promise.all([
         supabase.from('contact_messages').select('*', { count: 'exact', head: true }),
         supabase.from('learning_pathways').select('*', { count: 'exact', head: true }),

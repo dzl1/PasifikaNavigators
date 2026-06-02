@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react'
-import { supabase } from '../../lib/supabaseClient.js'
+import { isSupabaseConfigured, supabase } from '../../lib/supabaseClient.js'
 
 const PAGE_SIZE = 20
 
@@ -15,6 +15,12 @@ export default function MessagesPage() {
     setLoading(true)
     setError('')
 
+    if (!isSupabaseConfigured) {
+      setLoading(false)
+      setError('Authentication/database access is not configured yet.')
+      return
+    }
+
     const from = currentPage * PAGE_SIZE
     const to = from + PAGE_SIZE - 1
 
@@ -28,12 +34,25 @@ export default function MessagesPage() {
 
     if (fetchError) {
       console.error('Supabase error (contact_messages select):', fetchError)
-      setError(`Failed to load messages: ${fetchError.message} (code: ${fetchError.code})${fetchError.code === '42P01' ? ' — the contact_messages table may not exist yet. Run supabase/contact_messages.sql in your Supabase SQL editor.' : ''}`)
+      const setupHint = fetchError.code === '42P01'
+        ? ' The contact_messages table may not exist yet. Run supabase/contact_messages.sql in your Supabase SQL editor.'
+        : ''
+      const permissionHint = fetchError.code === '42501'
+        ? ' The admin read policy or table grant is missing. Re-run the updated supabase/contact_messages.sql file in your Supabase SQL editor.'
+        : ''
+      setError(`Failed to load messages: ${fetchError.message} (code: ${fetchError.code}).${setupHint}${permissionHint}`)
       return
     }
 
-    setMessages(data ?? [])
+    const nextMessages = data ?? []
+    setMessages(nextMessages)
     setTotal(count ?? 0)
+    setSelected((current) => {
+      if (current && nextMessages.some((message) => message.id === current.id)) {
+        return current
+      }
+      return nextMessages[0] ?? null
+    })
   }
 
   useEffect(() => {

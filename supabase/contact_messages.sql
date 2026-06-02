@@ -17,10 +17,10 @@ drop policy if exists "Allow public contact message inserts" on public.contact_m
 create policy "Allow public contact message inserts"
   on public.contact_messages
   for insert
-  to anon
+  to anon, authenticated
   with check (true);
 
-grant insert on public.contact_messages to anon;
+grant insert on public.contact_messages to anon, authenticated;
 
 -- Authenticated users (admins) can read all messages
 drop policy if exists "Admins can read contact messages" on public.contact_messages;
@@ -29,5 +29,6 @@ create policy "Admins can read contact messages"
   on public.contact_messages
   for select
   to authenticated
-  using (true);
+  using (lower(auth.jwt() ->> 'email') = 'dave@pasifikanavigators.nz');
 
+grant select on public.contact_messages to authenticated;
