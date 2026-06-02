@@ -94,6 +94,30 @@ textarea {
   color: #dbe7ea;
 }
 
+.site-nav__auth-btn {
+  display: inline-flex;
+  align-items: center;
+  padding: 7px 16px;
+  border: 1.5px solid rgba(255, 255, 255, 0.6);
+  border-radius: 6px;
+  background: transparent;
+  color: #fff;
+  font-family: "Open Sans", Poppins, system-ui, sans-serif;
+  font-size: 0.88rem;
+  font-weight: 700;
+  text-shadow: none;
+  cursor: pointer;
+  transition: background 140ms, border-color 140ms;
+  white-space: nowrap;
+}
+
+.site-nav__auth-btn:hover,
+.site-nav__auth-btn:focus-visible {
+  background: rgba(255, 255, 255, 0.15);
+  border-color: #fff;
+  color: #fff;
+}
+Ok 
 .home-hero {
   --hero-media-filter: brightness(0.95) saturate(2.18);
 

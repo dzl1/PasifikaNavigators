@@ -12,7 +12,7 @@ export default function LoginPage() {
 
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
-  const [error, setError] = useState('')
+  const [error, setError] = useState(location.state?.denied ? 'You do not have permission to access the admin panel.' : '')
   const [loading, setLoading] = useState(false)
 
   const handleSubmit = async (event) => {
