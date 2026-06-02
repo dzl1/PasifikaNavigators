@@ -118,6 +118,11 @@ textarea {
   color: #fff;
 }
 
+.site-nav__auth-btn--admin {
+  background: rgba(255, 255, 255, 0.12);
+  border-color: rgba(255, 255, 255, 0.9);
+}
+
 .home-hero {
   --hero-media-filter: brightness(0.95) saturate(2.18);
 

@@ -1,6 +1,7 @@
 import { useNavigate } from 'react-router-dom'
 import logo from '../data/images/logo.png'
 import { useAuth } from '../context/AuthContext.jsx'
+import { ADMIN_EMAIL } from '../lib/constants.js'
 
 const navItems = [
   { label: 'Home', href: '/#home' },
@@ -13,6 +14,7 @@ export default function SiteHeader() {
   const { session, signOut } = useAuth()
   const navigate = useNavigate()
   const isLoggedIn = Boolean(session)
+  const isAdmin = session?.user?.email?.toLowerCase() === ADMIN_EMAIL
 
   const handleLogout = async () => {
     await signOut()
@@ -28,6 +30,11 @@ export default function SiteHeader() {
         {navItems.map((item) => (
           <a key={item.href} href={item.href}>{item.label}</a>
         ))}
+        {isAdmin && (
+          <a className="site-nav__auth-btn site-nav__auth-btn--admin" href="/admin">
+            Admin
+          </a>
+        )}
         {isLoggedIn ? (
           <button
             type="button"

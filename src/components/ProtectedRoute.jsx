@@ -1,7 +1,6 @@
 import { Navigate, useLocation } from 'react-router-dom'
 import { useAuth } from '../context/AuthContext.jsx'
-
-const ADMIN_EMAIL = 'dave@pasifikanavigators.nz'
+import { ADMIN_EMAIL } from '../lib/constants.js'
 
 export default function ProtectedRoute({ children }) {
   const { session, signOut } = useAuth()
