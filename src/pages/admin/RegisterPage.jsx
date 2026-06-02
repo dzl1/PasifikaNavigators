@@ -68,7 +68,7 @@ export default function RegisterPage() {
             </p>
           </div>
           <div className="register-done">
-            <Link className="button button--primary login-form__submit" to="/admin/login">
+            <Link className="button button--primary login-form__submit" to="/login">
               Go to sign in
             </Link>
           </div>
@@ -152,7 +152,7 @@ export default function RegisterPage() {
         </form>
 
         <p className="login-card__back">
-          Already have an account? <Link to="/admin/login">Sign in</Link>
+          Already have an account? <Link to="/login">Sign in</Link>
         </p>
         <p className="login-card__back">
           <a href="/">← Back to website</a>

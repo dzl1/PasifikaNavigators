@@ -44,7 +44,7 @@ export default function SiteHeader() {
             Log out
           </button>
         ) : (
-          <a className="site-nav__auth-btn" href="/admin/login">
+          <a className="site-nav__auth-btn" href="/login">
             Login
           </a>
         )}

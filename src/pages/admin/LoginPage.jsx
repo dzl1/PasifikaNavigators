@@ -8,7 +8,7 @@ export default function LoginPage() {
   const { signIn } = useAuth()
   const navigate = useNavigate()
   const location = useLocation()
-  const from = location.state?.from?.pathname ?? '/admin'
+  const from = location.state?.from?.pathname ?? '/'
 
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
@@ -40,8 +40,8 @@ export default function LoginPage() {
         </div>
 
         <div className="login-card__header">
-          <h1>Admin login</h1>
-          <p>Sign in to manage content and messages.</p>
+          <h1>Sign in</h1>
+          <p>Welcome back to Pasifika Navigators.</p>
         </div>
 
         <form className="login-form" onSubmit={handleSubmit} noValidate>
@@ -55,7 +55,7 @@ export default function LoginPage() {
               required
               value={email}
               onChange={(e) => setEmail(e.target.value)}
-              placeholder="dave@pasifikanavigators.nz"
+              placeholder="your@email.com"
               disabled={loading}
             />
           </div>

@@ -188,8 +188,8 @@ export default function App() {
         <Route path="/pasifika" element={<PasifikaPage />} />
         <Route path="/contact" element={<ContactPage />} />
 
-        {/* Admin */}
-        <Route path="/admin/login" element={<LoginPage />} />
+        {/* Auth */}
+        <Route path="/login" element={<LoginPage />} />
         <Route path="/register" element={<RegisterPage />} />
         <Route
           path="/admin"
