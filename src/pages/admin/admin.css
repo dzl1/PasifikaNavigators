@@ -274,6 +274,9 @@
   display: flex;
   justify-content: center;
   margin-bottom: 28px;
+  padding: 16px 24px;
+  border-radius: 8px;
+  background: var(--deep-sea);
 }
 
 .login-card__brand img {
