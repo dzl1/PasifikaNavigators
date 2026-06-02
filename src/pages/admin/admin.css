@@ -320,6 +320,16 @@
   text-decoration: underline;
 }
 
+.form-field__hint {
+  font-weight: 400;
+  color: var(--muted);
+  font-size: 0.8rem;
+}
+
+.register-done {
+  margin-top: 8px;
+}
+
 /* ─── Form fields ─────────────────────────────────────────── */
 
 .form-field {

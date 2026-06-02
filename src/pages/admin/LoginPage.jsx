@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { useNavigate, useLocation } from 'react-router-dom'
+import { useNavigate, useLocation, Link } from 'react-router-dom'
 import { useAuth } from '../../context/AuthContext.jsx'
 import logoColor from '../../data/images/logo.png'
 import '../../pages/admin/admin.css'
@@ -88,6 +88,9 @@ export default function LoginPage() {
           </button>
         </form>
 
+        <p className="login-card__back">
+          Don't have an account? <Link to="/register">Create one</Link>
+        </p>
         <p className="login-card__back">
           <a href="/">← Back to website</a>
         </p>

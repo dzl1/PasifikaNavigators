@@ -10,6 +10,7 @@ import AdminLayout from './pages/admin/AdminLayout.jsx'
 import DashboardPage from './pages/admin/DashboardPage.jsx'
 import MessagesPage from './pages/admin/MessagesPage.jsx'
 import PathwaysPage from './pages/admin/PathwaysPage.jsx'
+import RegisterPage from './pages/admin/RegisterPage.jsx'
 import ProtectedRoute from './components/ProtectedRoute.jsx'
 import { AuthProvider } from './context/AuthContext.jsx'
 import './App.css'
@@ -189,6 +190,7 @@ export default function App() {
 
         {/* Admin */}
         <Route path="/admin/login" element={<LoginPage />} />
+        <Route path="/register" element={<RegisterPage />} />
         <Route
           path="/admin"
           element={
