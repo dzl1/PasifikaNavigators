@@ -32,7 +32,6 @@ const languageWeeks = [
   },
   {
     month: 'May',
-    badge: 'Featured',
     language: 'Samoa Language Week',
     nativeName: 'Vaiaso o le Gagana Samoa',
     dates: 'Sunday 31 May – Saturday 6 June 2026',
@@ -177,6 +176,58 @@ const languageWeeks = [
   },
 ]
 
+function parseCalendarDate(dateStamp) {
+  const match = /^(\d{4})(\d{2})(\d{2})$/.exec(dateStamp)
+  if (!match) return null
+
+  return new Date(Number(match[1]), Number(match[2]) - 1, Number(match[3]))
+}
+
+function getWeekDateRange(week) {
+  const dateRange = new URL(week.calendarUrl).searchParams.get('dates')
+  const [startDate, endDate] = dateRange?.split('/') ?? []
+  const start = parseCalendarDate(startDate)
+  const end = parseCalendarDate(endDate)
+
+  if (!start || !end) return null
+
+  return { start, end }
+}
+
+function getTodayDate() {
+  const now = new Date()
+  return new Date(now.getFullYear(), now.getMonth(), now.getDate())
+}
+
+function getFeaturedLanguageWeek(today = getTodayDate()) {
+  const activeWeek = languageWeeks.find((week) => {
+    const range = getWeekDateRange(week)
+    return range && today >= range.start && today < range.end
+  })
+
+  if (activeWeek) return activeWeek
+
+  return languageWeeks.find((week) => {
+    const range = getWeekDateRange(week)
+    return range && today < range.start
+  }) ?? languageWeeks[0]
+}
+
+function formatShortDateRange(week) {
+  const range = getWeekDateRange(week)
+  if (!range) return week.dates
+
+  const endInclusive = new Date(range.end)
+  endInclusive.setDate(endInclusive.getDate() - 1)
+
+  const formatter = new Intl.DateTimeFormat('en-NZ', {
+    day: 'numeric',
+    month: 'long',
+  })
+
+  return `${formatter.format(range.start)} – ${formatter.format(endInclusive)}`
+}
+
 const openingCeremonyAgenda = [
   { title: "Ta'ita'i o le Sauniga", detail: 'Susuga Taiti Teo' },
   { title: 'Tatalo Amata', detail: 'Dallin Lasike' },
@@ -304,7 +355,7 @@ function formatAgendaDetail(detail) {
   return segments
 }
 
-function LanguageCard({ week }) {
+function LanguageCard({ week, isFeatured }) {
   const actions = [
     { label: 'Official info', href: week.infoUrl, tone: 'primary', external: true },
     week.resourceUrl ? { label: week.resourceLabel, href: week.resourceUrl, tone: 'muted', external: true } : null,
@@ -320,7 +371,7 @@ function LanguageCard({ week }) {
           <h3>{week.language}</h3>
           <p className="language-card__native">{week.nativeName}</p>
         </div>
-        {week.badge && <span className="language-card__label">{week.badge}</span>}
+        {isFeatured && <span className="language-card__label">Upcoming</span>}
       </div>
       <div className="language-card__dates">{week.dates}</div>
       <p className="language-card__theme">
@@ -376,6 +427,7 @@ export default function PasifikaPage() {
   const [ceremonyOpen, setCeremonyOpen] = useState(false)
   const location = useLocation()
   const ceremonyRef = useRef(null)
+  const featuredWeek = getFeaturedLanguageWeek()
 
   useEffect(() => {
     if (location.hash === '#opening-ceremony') {
@@ -401,19 +453,19 @@ export default function PasifikaPage() {
           </div>
         </section>
 
-        <section className="pasifika-strip" aria-label="Samoa Language Week snapshot">
+        <section className="pasifika-strip" aria-label={`${featuredWeek.language} snapshot`}>
           <div>
-            <span>Now featured</span>
-            <strong>Vaiaso o le Gagana Samoa</strong>
+            <span>Upcoming</span>
+            <strong>{featuredWeek.nativeName}</strong>
           </div>
           <div>
             <span>2026 dates</span>
-            <strong>31 May – 6 June</strong>
+            <strong>{formatShortDateRange(featuredWeek)}</strong>
           </div>
           <div>
             <span>Official source</span>
             <strong>
-              <a className="pasifika-strip__link" href="https://www.mpp.govt.nz/programmes-and-funding/pacific-languages/pacific-language-weeks/samoa-language-week/" target="_blank" rel="noopener noreferrer">
+              <a className="pasifika-strip__link" href={featuredWeek.infoUrl} target="_blank" rel="noopener noreferrer">
                 Ministry for Pacific Peoples
               </a>
             </strong>
@@ -427,7 +479,7 @@ export default function PasifikaPage() {
           </div>
           <div className="language-grid" aria-live="polite">
             {languageWeeks.map((week, i) => (
-              <LanguageCard key={i} week={week} />
+              <LanguageCard key={i} week={week} isFeatured={week === featuredWeek} />
             ))}
           </div>
         </section>

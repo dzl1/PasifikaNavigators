@@ -114,10 +114,13 @@ function HomePage() {
           </div>
           <div className="intro-copy">
             <p>
-              Pasifika Navigators walks alongside individuals and families — helping them stay connected to who they are, where they come from, and where they are going.
+              Pasifika Navigators uses technology and innovation to help individuals and families stay connected to who they are, where they come from, and where they are going.
             </p>
             <p>
-              We meet people through many pathways: talanoa around the table, generational stories passed from grandparents to grandchildren, digital tools that bridge distance, community gatherings, and one-on-one conversations that honour each person's journey. However connection happens, we show up for it.
+              Through digital tools, storytelling, learning, AI, mapping, media, and community-led innovation, we create pathways that connect the past, present, and future. We honour the stories, knowledge, culture, and values passed down through generations, while helping our people use today's tools to build confidence, opportunity, and connection for tomorrow.
+            </p>
+            <p>
+              We believe technology should strengthen identity, not replace it. Whether through talanoa, digital storytelling, online learning, creative projects, or one-on-one support, Pasifika Navigators walks alongside our communities as they navigate a changing world with culture, connection, and purpose.
             </p>
           </div>
         </section>
