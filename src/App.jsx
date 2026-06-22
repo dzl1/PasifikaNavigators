@@ -2,6 +2,7 @@ import { useEffect, useRef, useState } from 'react'
 import { Routes, Route, Link, Navigate } from 'react-router-dom'
 import ContactPage from './pages/ContactPage.jsx'
 import PasifikaPage from './pages/PasifikaPage.jsx'
+import ProgrammesPage from './pages/ProgrammesPage.jsx'
 import TechPage from './pages/TechPage.jsx'
 import SiteHeader from './components/SiteHeader.jsx'
 import HeroPixelGlitchEffect from './components/HeroPixelGlitchEffect.jsx'
@@ -143,7 +144,7 @@ function HomePage() {
             <p className="home-hero__lede">
               Empowering our community through cultural innovation, practical support, and spaces where we can build the future.</p>
             <div className="home-hero__actions">
-              <a className="button button--primary" href="#programmes">Our programmes</a>
+              <Link className="button button--primary" to="/programmes">Our programmes</Link>
               <Link className="button button--ghost" to="/contact">Contact us</Link>
             </div>
           </div>
@@ -239,6 +240,7 @@ export default function App() {
       <Routes>
         <Route path="/" element={<HomePage />} />
         <Route path="/pasifika" element={<PasifikaPage />} />
+        <Route path="/programmes" element={<ProgrammesPage />} />
         <Route path="/tech" element={<TechPage />} />
         <Route path="/contact" element={<ContactPage />} />
 
