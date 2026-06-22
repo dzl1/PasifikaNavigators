@@ -180,7 +180,7 @@ textarea {
   padding: 172px clamp(18px, 5vw, 72px) 64px;
   color: #fff;
   overflow: hidden;
-  background: #102d3a;
+  background: url("/bg.jpg") center / cover fixed no-repeat;
   isolation: isolate;
 }
 
@@ -298,6 +298,8 @@ textarea {
 }
 
 .snapshot-band {
+  position: relative;
+  z-index: 2;
   display: grid;
   grid-template-columns: repeat(3, minmax(0, 1fr));
   border-top: 5px solid var(--coral);
