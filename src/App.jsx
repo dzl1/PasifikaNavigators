@@ -1,8 +1,10 @@
-import { useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { Routes, Route, Link, Navigate } from 'react-router-dom'
 import ContactPage from './pages/ContactPage.jsx'
 import PasifikaPage from './pages/PasifikaPage.jsx'
+import TechPage from './pages/TechPage.jsx'
 import SiteHeader from './components/SiteHeader.jsx'
+import HeroPixelGlitchEffect from './components/HeroPixelGlitchEffect.jsx'
 import logoWhite from './data/images/logo_white.png'
 import LoginPage from './pages/admin/LoginPage.jsx'
 import AdminLayout from './pages/admin/AdminLayout.jsx'
@@ -28,9 +30,10 @@ const programmes = [
     href: '/pasifika',
   },
   {
-    title: 'Connection Events',
-    description: 'Local gatherings that bring people together through faith, culture, food, music, and shared service.',
+    title: 'Pasifika Tech',
+    description: 'Digital tools, AI, storytelling, mapping, and creative innovation grounded in culture and connection.',
     accent: '#c94f3d',
+    href: '/tech',
   },
 ]
 
@@ -39,6 +42,9 @@ const stats = [
   { label: 'Led by', value: 'Pasifika community' },
   { label: 'Focused on', value: 'Culture, wellbeing, connection' },
 ]
+
+const HERO_VIDEO_FADE_MS = 720
+const HERO_VIDEO_REWIND_LEAD_SECONDS = 1.15
 
 function ProgrammeCard({ programme }) {
   const content = (
@@ -67,6 +73,45 @@ function ProgrammeCard({ programme }) {
 
 function HomePage() {
   const [heroVideoReady, setHeroVideoReady] = useState(false)
+  const [heroVideoFading, setHeroVideoFading] = useState(false)
+  const heroVideoRef = useRef(null)
+  const heroLoopingRef = useRef(false)
+  const heroLoopTimeoutRef = useRef(null)
+
+  useEffect(() => {
+    return () => {
+      window.clearTimeout(heroLoopTimeoutRef.current)
+    }
+  }, [])
+
+  const fadeToHeroVideoStart = (video) => {
+    if (!video || heroLoopingRef.current) return
+
+    heroLoopingRef.current = true
+    setHeroVideoFading(true)
+    window.clearTimeout(heroLoopTimeoutRef.current)
+
+    heroLoopTimeoutRef.current = window.setTimeout(() => {
+      video.currentTime = 0
+      video.play().catch(() => {})
+      window.requestAnimationFrame(() => {
+        setHeroVideoFading(false)
+        heroLoopingRef.current = false
+      })
+    }, HERO_VIDEO_FADE_MS)
+  }
+
+  const handleHeroVideoTimeUpdate = (event) => {
+    const video = event.currentTarget
+
+    if (!Number.isFinite(video.duration) || video.duration <= HERO_VIDEO_REWIND_LEAD_SECONDS) {
+      return
+    }
+
+    if (video.duration - video.currentTime <= HERO_VIDEO_REWIND_LEAD_SECONDS) {
+      fadeToHeroVideoStart(video)
+    }
+  }
 
   return (
     <div className="site-shell">
@@ -75,18 +120,24 @@ function HomePage() {
       <main>
         <section className="home-hero" id="home" aria-labelledby="home-title">
           <video
-            className={`home-hero__video${heroVideoReady ? ' home-hero__video--ready' : ''}`}
+            ref={heroVideoRef}
+            className={[
+              'home-hero__video',
+              heroVideoReady ? 'home-hero__video--ready' : '',
+              heroVideoFading ? 'home-hero__video--fading' : '',
+            ].filter(Boolean).join(' ')}
             autoPlay
             muted
-            loop
             playsInline
             preload="auto"
-            poster="/bg.jpg"
             aria-hidden="true"
             onLoadedData={() => setHeroVideoReady(true)}
+            onTimeUpdate={handleHeroVideoTimeUpdate}
+            onEnded={(event) => fadeToHeroVideoStart(event.currentTarget)}
           >
             <source src="/hero-video.mp4" type="video/mp4" />
           </video>
+          <HeroPixelGlitchEffect videoRef={heroVideoRef} />
           <div className="home-hero__content">
             <p className="section-kicker" id="home-title">Pasifika-Led in Te Hiku</p>
             <p className="home-hero__lede">
@@ -188,6 +239,7 @@ export default function App() {
       <Routes>
         <Route path="/" element={<HomePage />} />
         <Route path="/pasifika" element={<PasifikaPage />} />
+        <Route path="/tech" element={<TechPage />} />
         <Route path="/contact" element={<ContactPage />} />
 
         {/* Auth */}

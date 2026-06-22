@@ -1,0 +1,203 @@
+import { useEffect, useRef } from 'react'
+
+function createRandom(seed) {
+  let value = seed
+
+  return () => {
+    value = (value * 1664525 + 1013904223) % 4294967296
+    return value / 4294967296
+  }
+}
+
+export default function TechOrbField() {
+  const canvasRef = useRef(null)
+
+  useEffect(() => {
+    const canvas = canvasRef.current
+    const hero = canvas?.parentElement
+
+    if (!canvas || !hero || window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+      return undefined
+    }
+
+    const context = canvas.getContext('2d')
+    const random = createRandom(20260622)
+    const pointer = { x: -9999, y: -9999, active: false }
+    const clickImpulse = { x: 0, y: 0, strength: 0 }
+    let width = 0
+    let height = 0
+    let frameId = 0
+    let balls = []
+
+    const palette = ['#f0b64a', '#238ca3', '#8f11a8', '#ffffff', '#c94f3d']
+
+    const buildBalls = () => {
+      const nextBalls = []
+      const columns = Math.max(8, Math.floor(width / 92))
+      const rows = Math.max(5, Math.floor(height / 92))
+      const cellWidth = width / columns
+      const cellHeight = height / rows
+
+      for (let y = 0; y < rows; y += 1) {
+        for (let x = 0; x < columns; x += 1) {
+          const radius = 9 + random() * 22
+          const homeX = x * cellWidth + cellWidth * (0.22 + random() * 0.62)
+          const homeY = y * cellHeight + cellHeight * (0.2 + random() * 0.64)
+
+          nextBalls.push({
+            x: homeX,
+            y: homeY,
+            homeX,
+            homeY,
+            vx: 0,
+            vy: 0,
+            radius,
+            color: palette[Math.floor(random() * palette.length)],
+            alpha: 0.16 + random() * 0.24,
+            mass: radius * 0.45,
+          })
+        }
+      }
+
+      balls = nextBalls
+    }
+
+    const resize = () => {
+      const rect = hero.getBoundingClientRect()
+      const ratio = Math.min(window.devicePixelRatio || 1, 2)
+      width = Math.max(1, rect.width)
+      height = Math.max(1, rect.height)
+      canvas.width = Math.floor(width * ratio)
+      canvas.height = Math.floor(height * ratio)
+      canvas.style.width = `${width}px`
+      canvas.style.height = `${height}px`
+      context.setTransform(ratio, 0, 0, ratio, 0, 0)
+      buildBalls()
+    }
+
+    const updatePointer = (event) => {
+      const rect = hero.getBoundingClientRect()
+      pointer.x = event.clientX - rect.left
+      pointer.y = event.clientY - rect.top
+      pointer.active = true
+    }
+
+    const clearPointer = () => {
+      pointer.active = false
+      pointer.x = -9999
+      pointer.y = -9999
+    }
+
+    const pushFromClick = (event) => {
+      updatePointer(event)
+      clickImpulse.x = pointer.x
+      clickImpulse.y = pointer.y
+      clickImpulse.strength = 1
+    }
+
+    const animate = () => {
+      context.clearRect(0, 0, width, height)
+
+      const gradient = context.createLinearGradient(0, 0, width, height)
+      gradient.addColorStop(0, 'rgba(8, 22, 30, 0.88)')
+      gradient.addColorStop(0.58, 'rgba(16, 73, 84, 0.62)')
+      gradient.addColorStop(1, 'rgba(35, 140, 163, 0.4)')
+      context.fillStyle = gradient
+      context.fillRect(0, 0, width, height)
+
+      balls.forEach((ball) => {
+        const homeDx = ball.homeX - ball.x
+        const homeDy = ball.homeY - ball.y
+        ball.vx += homeDx * 0.006
+        ball.vy += homeDy * 0.006
+
+        const pointerDx = ball.x - pointer.x
+        const pointerDy = ball.y - pointer.y
+        const pointerDistance = Math.hypot(pointerDx, pointerDy)
+
+        if (pointer.active && pointerDistance < 180) {
+          const force = (1 - pointerDistance / 180) * 3.8
+          ball.vx += (pointerDx / Math.max(pointerDistance, 1)) * force
+          ball.vy += (pointerDy / Math.max(pointerDistance, 1)) * force
+        }
+
+        if (clickImpulse.strength > 0.01) {
+          const clickDx = ball.x - clickImpulse.x
+          const clickDy = ball.y - clickImpulse.y
+          const clickDistance = Math.hypot(clickDx, clickDy)
+
+          if (clickDistance < 340) {
+            const force = (1 - clickDistance / 340) * 12 * clickImpulse.strength
+            ball.vx += (clickDx / Math.max(clickDistance, 1)) * force
+            ball.vy += (clickDy / Math.max(clickDistance, 1)) * force
+          }
+        }
+
+        ball.vx *= 0.9
+        ball.vy *= 0.9
+        ball.x += ball.vx / Math.max(ball.mass, 1)
+        ball.y += ball.vy / Math.max(ball.mass, 1)
+      })
+
+      for (let i = 0; i < balls.length; i += 1) {
+        for (let j = i + 1; j < balls.length; j += 1) {
+          const a = balls[i]
+          const b = balls[j]
+          const dx = b.x - a.x
+          const dy = b.y - a.y
+          const distance = Math.hypot(dx, dy)
+          const minDistance = a.radius + b.radius + 2
+
+          if (distance > 0 && distance < minDistance) {
+            const overlap = (minDistance - distance) * 0.18
+            const nx = dx / distance
+            const ny = dy / distance
+            a.vx -= nx * overlap
+            a.vy -= ny * overlap
+            b.vx += nx * overlap
+            b.vy += ny * overlap
+          }
+        }
+      }
+
+      balls.forEach((ball) => {
+        const speed = Math.min(Math.hypot(ball.vx, ball.vy) * 0.08, 0.24)
+        const glow = ball.alpha + speed
+
+        context.beginPath()
+        context.fillStyle = ball.color
+        context.globalAlpha = glow
+        context.arc(ball.x, ball.y, ball.radius, 0, Math.PI * 2)
+        context.fill()
+
+        context.beginPath()
+        context.globalAlpha = glow * 0.22
+        context.arc(ball.x, ball.y, ball.radius * 2.6, 0, Math.PI * 2)
+        context.fill()
+      })
+
+      context.globalAlpha = 1
+      clickImpulse.strength *= 0.92
+      frameId = window.requestAnimationFrame(animate)
+    }
+
+    const observer = new ResizeObserver(resize)
+    observer.observe(hero)
+    resize()
+    animate()
+
+    hero.addEventListener('pointermove', updatePointer)
+    hero.addEventListener('pointerleave', clearPointer)
+    hero.addEventListener('pointerdown', pushFromClick)
+
+    return () => {
+      window.cancelAnimationFrame(frameId)
+      observer.disconnect()
+      hero.removeEventListener('pointermove', updatePointer)
+      hero.removeEventListener('pointerleave', clearPointer)
+      hero.removeEventListener('pointerdown', pushFromClick)
+    }
+  }, [])
+
+  return <canvas className="tech-orb-field" ref={canvasRef} aria-hidden="true" />
+}
