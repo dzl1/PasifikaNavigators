@@ -9,7 +9,26 @@ function createRandom(seed) {
   }
 }
 
-export default function TechOrbField() {
+function drawPolygon(context, radius, sides) {
+  context.beginPath()
+
+  for (let i = 0; i < sides; i += 1) {
+    const angle = (Math.PI * 2 * i) / sides - Math.PI / 2
+    const x = Math.cos(angle) * radius
+    const y = Math.sin(angle) * radius
+
+    if (i === 0) {
+      context.moveTo(x, y)
+    } else {
+      context.lineTo(x, y)
+    }
+  }
+
+  context.closePath()
+  context.fill()
+}
+
+export default function TechOrbField({ className = 'tech-orb-field', shape = 'circle' }) {
   const canvasRef = useRef(null)
 
   useEffect(() => {
@@ -163,17 +182,40 @@ export default function TechOrbField() {
       balls.forEach((ball) => {
         const speed = Math.min(Math.hypot(ball.vx, ball.vy) * 0.08, 0.24)
         const glow = ball.alpha + speed
+        const size = ball.radius * 2
+        const glowSize = ball.radius * 4.8
 
-        context.beginPath()
         context.fillStyle = ball.color
-        context.globalAlpha = glow
-        context.arc(ball.x, ball.y, ball.radius, 0, Math.PI * 2)
-        context.fill()
 
-        context.beginPath()
-        context.globalAlpha = glow * 0.22
-        context.arc(ball.x, ball.y, ball.radius * 2.6, 0, Math.PI * 2)
-        context.fill()
+        if (shape === 'cube') {
+          context.save()
+          context.translate(ball.x, ball.y)
+          context.rotate((ball.vx + ball.vy) * 0.012)
+          context.globalAlpha = glow
+          context.fillRect(-size / 2, -size / 2, size, size)
+          context.globalAlpha = glow * 0.22
+          context.fillRect(-glowSize / 2, -glowSize / 2, glowSize, glowSize)
+          context.restore()
+        } else if (shape === 'hexagon') {
+          context.save()
+          context.translate(ball.x, ball.y)
+          context.rotate((ball.vx + ball.vy) * 0.008)
+          context.globalAlpha = glow
+          drawPolygon(context, ball.radius, 6)
+          context.globalAlpha = glow * 0.22
+          drawPolygon(context, ball.radius * 2.4, 6)
+          context.restore()
+        } else {
+          context.beginPath()
+          context.globalAlpha = glow
+          context.arc(ball.x, ball.y, ball.radius, 0, Math.PI * 2)
+          context.fill()
+
+          context.beginPath()
+          context.globalAlpha = glow * 0.22
+          context.arc(ball.x, ball.y, ball.radius * 2.6, 0, Math.PI * 2)
+          context.fill()
+        }
       })
 
       context.globalAlpha = 1
@@ -197,7 +239,7 @@ export default function TechOrbField() {
       hero.removeEventListener('pointerleave', clearPointer)
       hero.removeEventListener('pointerdown', pushFromClick)
     }
-  }, [])
+  }, [shape])
 
-  return <canvas className="tech-orb-field" ref={canvasRef} aria-hidden="true" />
+  return <canvas className={className} ref={canvasRef} aria-hidden="true" />
 }

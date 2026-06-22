@@ -1,5 +1,6 @@
 import { Link } from 'react-router-dom'
 import SiteHeader from '../components/SiteHeader.jsx'
+import TechOrbField from '../components/TechOrbField.jsx'
 import logoWhite from '../data/images/logo_white.png'
 import './ProgrammesPage.css'
 
@@ -38,6 +39,29 @@ const programmes = [
     description:
       'Community-led design, one-on-one support, workshops, and digital confidence building for families, groups, and organisations.',
     accent: '#8f11a8',
+  },
+]
+
+const communityProgrammes = [
+  {
+    title: 'Community Support',
+    tag: 'Navigation and advocacy',
+    description: 'Culturally grounded navigation, advocacy, and practical support for Pasifika families in Kaitaia.',
+    accent: '#238ca3',
+  },
+  {
+    title: 'Pacific Language Weeks',
+    tag: 'Language resources',
+    description: 'Celebration dates, learning links, and resources that help families keep language visible through the year.',
+    accent: '#8f11a8',
+    href: '/pasifika',
+  },
+  {
+    title: 'Pasifika Tech',
+    tag: 'Creative innovation',
+    description: 'Digital tools, AI, storytelling, mapping, and creative innovation grounded in culture and connection.',
+    accent: '#c94f3d',
+    href: '/tech',
   },
 ]
 
@@ -136,12 +160,12 @@ export default function ProgrammesPage() {
 
       <main>
         <section className="programmes-hero" aria-labelledby="programmes-title">
-          <div className="programmes-hero__pattern" aria-hidden="true" />
+          <TechOrbField className="programmes-hex-field" shape="hexagon" />
           <div className="programmes-hero__content">
             <p className="section-kicker">Programmes</p>
             <h1 id="programmes-title">Programmes that grow confidence, culture, and connection.</h1>
             <p>
-              Pasifika Navigators runs learning and innovation programmes for tamariki, rangatahi, families, and community partners across Te Hiku.
+              Pasifika Navigators runs learning and innovation programmes for youth and families, working with community partners across Te Hiku.
             </p>
             <div className="programmes-hero__actions">
               <a className="button button--primary" href="#programme-list">View programmes</a>
@@ -171,6 +195,18 @@ export default function ProgrammesPage() {
             <p>
               We create spaces where Pasifika children and families can learn by doing, ask questions, build confidence, and see themselves reflected in the future they are helping to shape.
             </p>
+          </div>
+        </section>
+
+        <section className="programmes-section" id="community-programmes">
+          <div className="programmes-section__heading">
+            <p className="section-kicker">Programmes</p>
+            <h2>Support shaped for our people.</h2>
+          </div>
+          <div className="programmes-grid">
+            {communityProgrammes.map((programme) => (
+              <ProgrammeFeatureCard key={programme.title} programme={programme} />
+            ))}
           </div>
         </section>
 

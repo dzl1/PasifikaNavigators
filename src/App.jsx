@@ -1,11 +1,10 @@
-import { useEffect, useRef, useState } from 'react'
 import { Routes, Route, Link, Navigate } from 'react-router-dom'
 import ContactPage from './pages/ContactPage.jsx'
 import PasifikaPage from './pages/PasifikaPage.jsx'
 import ProgrammesPage from './pages/ProgrammesPage.jsx'
 import TechPage from './pages/TechPage.jsx'
 import SiteHeader from './components/SiteHeader.jsx'
-import HeroPixelGlitchEffect from './components/HeroPixelGlitchEffect.jsx'
+import TechOrbField from './components/TechOrbField.jsx'
 import logoWhite from './data/images/logo_white.png'
 import LoginPage from './pages/admin/LoginPage.jsx'
 import AdminLayout from './pages/admin/AdminLayout.jsx'
@@ -18,127 +17,20 @@ import ProtectedRoute from './components/ProtectedRoute.jsx'
 import { AuthProvider } from './context/AuthContext.jsx'
 import './App.css'
 
-const programmes = [
-  {
-    title: 'Community Support',
-    description: 'Culturally grounded navigation, advocacy, and practical support for Pasifika families in Kaitaia.',
-    accent: '#238ca3',
-  },
-  {
-    title: 'Pacific Language Weeks',
-    description: 'Celebration dates, learning links, and resources that help families keep language visible through the year.',
-    accent: '#8f11a8',
-    href: '/pasifika',
-  },
-  {
-    title: 'Pasifika Tech',
-    description: 'Digital tools, AI, storytelling, mapping, and creative innovation grounded in culture and connection.',
-    accent: '#c94f3d',
-    href: '/tech',
-  },
-]
-
 const stats = [
   { label: 'Based in', value: 'Kaitaia, Aotearoa NZ' },
   { label: 'Led by', value: 'Pasifika community' },
   { label: 'Focused on', value: 'Culture, wellbeing, connection' },
 ]
 
-const HERO_VIDEO_FADE_MS = 720
-const HERO_VIDEO_REWIND_LEAD_SECONDS = 1.15
-
-function ProgrammeCard({ programme }) {
-  const content = (
-    <>
-      <span className="programme-card__mark" aria-hidden="true" />
-      <h3>{programme.title}</h3>
-      <p>{programme.description}</p>
-      <span className="programme-card__action">{programme.href ? 'Explore resources' : 'Learn more'}</span>
-    </>
-  )
-
-  if (programme.href) {
-    return (
-      <Link className="programme-card" to={programme.href} style={{ '--accent': programme.accent }}>
-        {content}
-      </Link>
-    )
-  }
-
-  return (
-    <article className="programme-card" style={{ '--accent': programme.accent }}>
-      {content}
-    </article>
-  )
-}
-
 function HomePage() {
-  const [heroVideoReady, setHeroVideoReady] = useState(false)
-  const [heroVideoFading, setHeroVideoFading] = useState(false)
-  const heroVideoRef = useRef(null)
-  const heroLoopingRef = useRef(false)
-  const heroLoopTimeoutRef = useRef(null)
-
-  useEffect(() => {
-    return () => {
-      window.clearTimeout(heroLoopTimeoutRef.current)
-    }
-  }, [])
-
-  const fadeToHeroVideoStart = (video) => {
-    if (!video || heroLoopingRef.current) return
-
-    heroLoopingRef.current = true
-    setHeroVideoFading(true)
-    window.clearTimeout(heroLoopTimeoutRef.current)
-
-    heroLoopTimeoutRef.current = window.setTimeout(() => {
-      video.currentTime = 0
-      video.play().catch(() => {})
-      window.requestAnimationFrame(() => {
-        setHeroVideoFading(false)
-        heroLoopingRef.current = false
-      })
-    }, HERO_VIDEO_FADE_MS)
-  }
-
-  const handleHeroVideoTimeUpdate = (event) => {
-    const video = event.currentTarget
-
-    if (!Number.isFinite(video.duration) || video.duration <= HERO_VIDEO_REWIND_LEAD_SECONDS) {
-      return
-    }
-
-    if (video.duration - video.currentTime <= HERO_VIDEO_REWIND_LEAD_SECONDS) {
-      fadeToHeroVideoStart(video)
-    }
-  }
-
   return (
     <div className="site-shell">
       <SiteHeader />
 
       <main>
         <section className="home-hero" id="home" aria-labelledby="home-title">
-          <video
-            ref={heroVideoRef}
-            className={[
-              'home-hero__video',
-              heroVideoReady ? 'home-hero__video--ready' : '',
-              heroVideoFading ? 'home-hero__video--fading' : '',
-            ].filter(Boolean).join(' ')}
-            autoPlay
-            muted
-            playsInline
-            preload="auto"
-            aria-hidden="true"
-            onLoadedData={() => setHeroVideoReady(true)}
-            onTimeUpdate={handleHeroVideoTimeUpdate}
-            onEnded={(event) => fadeToHeroVideoStart(event.currentTarget)}
-          >
-            <source src="/hero-video.mp4" type="video/mp4" />
-          </video>
-          <HeroPixelGlitchEffect videoRef={heroVideoRef} />
+          <TechOrbField className="home-cube-field" shape="cube" />
           <div className="home-hero__content">
             <p className="section-kicker" id="home-title">Pasifika-Led in Te Hiku</p>
             <p className="home-hero__lede">
@@ -184,18 +76,6 @@ function HomePage() {
             <p>
               We walk alongside our people with respect for language, identity, and the shared strength of Pasifika communities.
             </p>
-          </div>
-        </section>
-
-        <section className="content-section" id="programmes">
-          <div className="section-heading">
-            <p className="section-kicker">Programmes</p>
-            <h2>Support shaped for our people.</h2>
-          </div>
-          <div className="programme-grid">
-            {programmes.map((programme) => (
-              <ProgrammeCard key={programme.title} programme={programme} />
-            ))}
           </div>
         </section>
 

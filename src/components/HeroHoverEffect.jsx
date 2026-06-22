@@ -50,7 +50,7 @@ const fragmentShader = `
 
     // --- Chromatic aberration (RGB split) ---
     // Spread increases toward edge and wobbles over time
-    float spread = influence * 0.022 * (1.0 + 0.4 * sin(uTime * 2.1));
+    float spread = influence * 0.010 * (1.0 + 0.28 * sin(uTime * 2.1));
     vec2 dir = normalize(delta + 0.0001);
     float r = texture2D(uTexture, clamp(uv + dir * spread, 0.0, 1.0)).r;
     float g = texture2D(uTexture, clamp(uv,                0.0, 1.0)).g;
@@ -58,11 +58,11 @@ const fragmentShader = `
     vec3 color = vec3(r, g, b);
 
     // --- Brightness boost ---
-    color *= mix(1.0, 1.35, influence);
+    color *= mix(1.0, 1.18, influence);
 
     // --- Saturation boost ---
     float luma = dot(color, vec3(0.2126, 0.7152, 0.0722));
-    color = mix(color, mix(vec3(luma), color, 1.8), influence);
+    color = mix(color, mix(vec3(luma), color, 1.32), influence);
 
     // --- Film grain (keeps it from looking flat) ---
     float grain = rand(vUv + fract(uTime * 0.07)) * 0.06 - 0.03;
@@ -124,6 +124,8 @@ export default function HeroHoverEffect({ imageUrl, videoUrl }) {
 
       let video = null
       let texture = null
+      let canActivate = false
+      let activationTimerId = 0
 
       if (videoUrl) {
         video = document.createElement('video')
@@ -158,6 +160,7 @@ export default function HeroHoverEffect({ imageUrl, videoUrl }) {
       }
 
       let previousMouse = null
+      let enteredAfterActivation = false
 
       const updateMouse = (event) => {
         const rect = hero.getBoundingClientRect()
@@ -181,31 +184,42 @@ export default function HeroHoverEffect({ imageUrl, videoUrl }) {
       const animate = () => {
         uniforms.uTime.value = clock.getElapsedTime()
         const target = hovered ? 1 : 0
-        uniforms.uIntensity.value += (target - uniforms.uIntensity.value) * 0.08
+        uniforms.uIntensity.value += (target - uniforms.uIntensity.value) * 0.045
         uniforms.uVelocity.value.multiplyScalar(0.92)
         renderer.render(scene, camera)
         frameId = window.requestAnimationFrame(animate)
       }
 
-      const handlePointerEnter = (event) => {
-        hovered = true
+      const handlePointerEnter = () => {
         previousMouse = null
-        updateMouse(event)
-        hero.classList.add('hero--fx-active')
+        enteredAfterActivation = canActivate
       }
 
       const handlePointerMove = (event) => {
+        if (!canActivate || !enteredAfterActivation) {
+          return
+        }
+
+        if (!hovered) {
+          hovered = true
+          hero.classList.add('hero--fx-active')
+        }
         updateMouse(event)
       }
 
       const handlePointerLeave = () => {
         hovered = false
+        enteredAfterActivation = false
+        previousMouse = null
         hero.classList.remove('hero--fx-active')
       }
 
       const observer = new ResizeObserver(resize)
       observer.observe(hero)
       resize()
+      activationTimerId = window.setTimeout(() => {
+        canActivate = true
+      }, 260)
       animate()
 
       hero.addEventListener('pointerenter', handlePointerEnter)
@@ -214,6 +228,7 @@ export default function HeroHoverEffect({ imageUrl, videoUrl }) {
 
       cleanupThree = () => {
         window.cancelAnimationFrame(frameId)
+        window.clearTimeout(activationTimerId)
         observer.disconnect()
         hero.removeEventListener('pointerenter', handlePointerEnter)
         hero.removeEventListener('pointermove', handlePointerMove)

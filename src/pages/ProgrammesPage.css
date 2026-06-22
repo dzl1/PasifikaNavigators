@@ -4,35 +4,39 @@
 
 .programmes-hero {
   position: relative;
-  min-height: min(680px, 82svh);
+  min-height: min(700px, 82svh);
   display: flex;
   align-items: flex-end;
   padding: 172px clamp(18px, 5vw, 72px) 64px;
   overflow: hidden;
   isolation: isolate;
   color: #fff;
-  background:
-    linear-gradient(90deg, rgba(13, 20, 26, 0.9), rgba(19, 58, 75, 0.62) 54%, rgba(35, 140, 163, 0.28)),
-    #123443;
+  background: #102d3a;
 }
 
-.programmes-hero__pattern {
+.programmes-hero::after {
+  content: "";
   position: absolute;
   inset: 0;
   z-index: 0;
-  opacity: 0.78;
   background:
-    radial-gradient(circle at 78% 20%, rgba(240, 182, 74, 0.28), transparent 24%),
-    radial-gradient(circle at 18% 82%, rgba(201, 79, 61, 0.24), transparent 26%),
-    linear-gradient(115deg, transparent 0 20%, rgba(255, 255, 255, 0.08) 20% 20.6%, transparent 20.6% 36%, rgba(255, 255, 255, 0.08) 36% 36.6%, transparent 36.6%),
-    repeating-linear-gradient(90deg, rgba(255, 255, 255, 0.06) 0 1px, transparent 1px 80px),
-    repeating-linear-gradient(0deg, rgba(255, 255, 255, 0.04) 0 1px, transparent 1px 80px);
-  transform: scale(1.06);
+    linear-gradient(90deg, rgba(25, 99, 163, 0.9), rgba(5, 180, 255, 0.58) 52%, rgba(35, 140, 163, 0.28)),
+    radial-gradient(circle at 78% 18%, rgba(240, 182, 74, 0.24), transparent 24%);
+  pointer-events: none;
+}
+
+.programmes-hex-field {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  width: 100%;
+  height: 100%;
+  display: block;
 }
 
 .programmes-hero__content {
   position: relative;
-  z-index: 1;
+  z-index: 2;
   width: min(900px, 100%);
   min-width: 0;
 }
