@@ -1,5 +1,6 @@
 import { useState } from 'react'
 import HeroHoverEffect from '../components/HeroHoverEffect.jsx'
+import TechOrbField from '../components/TechOrbField.jsx'
 import SiteHeader from '../components/SiteHeader.jsx'
 import logoWhite from '../data/images/logo_white.png'
 import { isSupabaseConfigured, supabase } from '../lib/supabaseClient.js'
@@ -69,6 +70,7 @@ export default function ContactPage() {
 
       <main>
         <section className="contact-hero" aria-labelledby="contact-title">
+          <TechOrbField className="home-cube-field" shape="cube" />
           <HeroHoverEffect imageUrl="/pasifika-hero.png" />
           <div className="contact-hero__content">
             <p className="section-kicker">Contact Us</p>

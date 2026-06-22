@@ -190,7 +190,7 @@ textarea {
   inset: 0;
   z-index: 0;
   background:
-    linear-gradient(90deg, rgba(13, 20, 26, 0.9), rgba(19, 58, 75, 0.58) 52%, rgba(35, 140, 163, 0.28)),
+    linear-gradient(90deg, rgba(0, 62, 116, 0.9), rgba(0, 92, 132, 0.58) 52%, rgba(35, 140, 163, 0.28)),
     radial-gradient(circle at 78% 18%, rgba(240, 182, 74, 0.24), transparent 24%);
   pointer-events: none;
 }
