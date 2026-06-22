@@ -1,7 +1,7 @@
 import { Link } from 'react-router-dom'
 import SiteHeader from '../components/SiteHeader.jsx'
 import TechOrbField from '../components/TechOrbField.jsx'
-import logoWhite from '../data/images/logo_white.png'
+import SiteFooter from '../components/SiteFooter.jsx'
 import './ProgrammesPage.css'
 
 const programmeStats = [
@@ -222,18 +222,18 @@ export default function ProgrammesPage() {
           </div>
         </section>
 
-        <section className="programmes-feature">
-          <div className="programmes-feature__copy">
+        <section className="gradient-feature programmes-feature">
+          <div className="gradient-feature__inner programmes-feature__inner">
             <p className="section-kicker">How We Deliver</p>
             <h2>Learning that is hands-on, culturally grounded, and community led.</h2>
             <p>
               We support workshops, classes, community projects, and client work that turn ideas into practical outcomes. The focus is always on confidence, access, creativity, and connection.
             </p>
-          </div>
-          <div className="programmes-feature__list" aria-label="Programme delivery areas">
-            {deliveryAreas.map((area) => (
-              <span key={area}>{area}</span>
-            ))}
+            <div className="programmes-feature__list" aria-label="Programme delivery areas">
+              {deliveryAreas.map((area) => (
+                <span key={area}>{area}</span>
+              ))}
+            </div>
           </div>
         </section>
 
@@ -268,22 +268,7 @@ export default function ProgrammesPage() {
         </section>
       </main>
 
-      <footer className="site-footer">
-        <div className="site-footer__intro">
-          <img src={logoWhite} alt="Pasifika Navigators" />
-        </div>
-        <div className="site-footer__details">
-          <div>
-            <span>Email</span>
-            <a href="mailto:office@pasifikanavigators.nz">office@pasifikanavigators.nz</a>
-          </div>
-          <div>
-            <span>Phone</span>
-            <a href="tel:+64212178028">+64 21 2178028</a>
-          </div>
-        </div>
-        <p className="site-footer__copyright">© {new Date().getFullYear()} Pasifika Navigators. All rights reserved.</p>
-      </footer>
+      <SiteFooter />
     </div>
   )
 }

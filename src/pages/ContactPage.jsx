@@ -2,7 +2,7 @@ import { useState } from 'react'
 import HeroHoverEffect from '../components/HeroHoverEffect.jsx'
 import TechOrbField from '../components/TechOrbField.jsx'
 import SiteHeader from '../components/SiteHeader.jsx'
-import logoWhite from '../data/images/logo_white.png'
+import SiteFooter from '../components/SiteFooter.jsx'
 import { isSupabaseConfigured, supabase } from '../lib/supabaseClient.js'
 
 const initialForm = {
@@ -162,22 +162,7 @@ export default function ContactPage() {
         </section>
       </main>
 
-      <footer className="site-footer">
-        <div className="site-footer__intro">
-          <img src={logoWhite} alt="Pasifika Navigators" />
-        </div>
-        <div className="site-footer__details">
-          <div>
-            <span>Email</span>
-            <a href="mailto:office@pasifikanavigators.nz">office@pasifikanavigators.nz</a>
-          </div>
-          <div>
-            <span>Phone</span>
-            <a href="tel:+64212178028">+64 21 2178028</a>
-          </div>
-        </div>
-        <p className="site-footer__copyright">© {new Date().getFullYear()} Pasifika Navigators. All rights reserved.</p>
-      </footer>
+      <SiteFooter />
     </div>
   )
 }

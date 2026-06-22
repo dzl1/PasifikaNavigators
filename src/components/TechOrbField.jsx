@@ -48,7 +48,9 @@ export default function TechOrbField({ className = 'tech-orb-field', shape = 'ci
     let frameId = 0
     let balls = []
 
-    const palette = ['#f0b64a', '#238ca3', '#8f11a8', '#ffffff', '#c94f3d']
+    const cubePalette = ['#8ad8f7', '#5fc4ea', '#2f9ac8', '#1f6f99', '#124a6d', '#0a2f4d']
+    const defaultPalette = ['#f0b64a', '#238ca3', '#8f11a8', '#ffffff', '#c94f3d']
+    const palette = shape === 'cube' ? cubePalette : defaultPalette
 
     const buildBalls = () => {
       const nextBalls = []

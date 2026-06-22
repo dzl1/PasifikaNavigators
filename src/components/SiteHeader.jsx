@@ -6,7 +6,6 @@ import { ADMIN_EMAIL } from '../lib/constants.js'
 
 const navItems = [
   { label: 'Home', href: '/#home' },
-  { label: 'About', href: '/#about' },
   { label: 'Programmes', href: '/programmes' },
   { label: 'Tech', href: '/tech' },
   { label: 'Contact', href: '/contact' },

@@ -696,7 +696,9 @@ article.programme-card:hover {
   grid-template-columns: minmax(260px, 1.2fr) repeat(2, minmax(180px, 0.8fr));
   gap: 36px;
   padding: 70px clamp(18px, 5vw, 72px) 34px;
-  background: var(--deep-sea);
+  background:
+    linear-gradient(135deg, rgba(8, 22, 30, 0.94), rgba(19, 58, 75, 0.9)),
+    url("/pasifika-hero.png") center / cover fixed;
   color: #fff;
 }
 

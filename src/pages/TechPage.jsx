@@ -2,6 +2,7 @@ import { useEffect, useRef } from 'react'
 import { Link } from 'react-router-dom'
 import SiteHeader from '../components/SiteHeader.jsx'
 import TechOrbField from '../components/TechOrbField.jsx'
+import SiteFooter from '../components/SiteFooter.jsx'
 import logoWhite from '../data/images/logo_white.png'
 import './TechPage.css'
 
@@ -226,22 +227,7 @@ export default function TechPage() {
         </section>
       </main>
 
-      <footer className="site-footer">
-        <div className="site-footer__intro">
-          <img src={logoWhite} alt="Pasifika Navigators" />
-        </div>
-        <div className="site-footer__details">
-          <div>
-            <span>Email</span>
-            <a href="mailto:office@pasifikanavigators.nz">office@pasifikanavigators.nz</a>
-          </div>
-          <div>
-            <span>Phone</span>
-            <a href="tel:+64212178028">+64 21 2178028</a>
-          </div>
-        </div>
-        <p className="site-footer__copyright">© {new Date().getFullYear()} Pasifika Navigators. All rights reserved.</p>
-      </footer>
+      <SiteFooter />
     </div>
   )
 }
