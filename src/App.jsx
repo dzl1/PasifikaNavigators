@@ -4,7 +4,6 @@ import PasifikaPage from './pages/PasifikaPage.jsx'
 import ProgrammesPage from './pages/ProgrammesPage.jsx'
 import TechPage from './pages/TechPage.jsx'
 import SiteHeader from './components/SiteHeader.jsx'
-import TechOrbField from './components/TechOrbField.jsx'
 import SiteFooter from './components/SiteFooter.jsx'
 import LoginPage from './pages/admin/LoginPage.jsx'
 import AdminLayout from './pages/admin/AdminLayout.jsx'
@@ -17,10 +16,41 @@ import ProtectedRoute from './components/ProtectedRoute.jsx'
 import { AuthProvider } from './context/AuthContext.jsx'
 import './App.css'
 
-const stats = [
-  { label: 'Based in', value: 'Kaitaia, Aotearoa NZ' },
-  { label: 'Led by', value: 'Pasifika community' },
-  { label: 'Focused on', value: 'Culture, wellbeing, connection' },
+const focusAreas = [
+  {
+    title: 'Community Support',
+    body: 'Strengthening whanau and supporting wellbeing through advocacy and service.',
+  },
+  {
+    title: 'Digital Inclusion',
+    body: 'Helping bridge the digital divide and building skills for a connected future.',
+  },
+  {
+    title: 'Culture & Identity',
+    body: 'Celebrating our heritage, language, and traditions for future generations.',
+  },
+  {
+    title: 'Youth Opportunities',
+    body: 'Creating pathways for rangatahi to thrive through education, mentoring and support.',
+  },
+]
+
+const values = [
+  {
+    title: "Fa'atuatua",
+    label: 'Trust',
+    body: 'We act with integrity, honesty and accountability in all that we do.',
+  },
+  {
+    title: "Fa'afesoota'i",
+    label: 'Connect',
+    body: 'We build strong relationships and partnerships across our communities.',
+  },
+  {
+    title: "Fa'avave",
+    label: 'Empower',
+    body: 'We empower our people to lead, succeed and create change.',
+  },
 ]
 
 function HomePage() {
@@ -30,68 +60,56 @@ function HomePage() {
 
       <main>
         <section className="home-hero" id="home" aria-labelledby="home-title">
-          <TechOrbField className="home-cube-field" shape="cube" />
-          <div className="home-hero__content">
-            <p className="section-kicker" id="home-title">Pasifika-Led in Te Hiku</p>
-            <p className="home-hero__lede">
-              Empowering our community through cultural innovation, practical support, and spaces where we can build the future.</p>
-            <div className="home-hero__actions">
-              <Link className="button button--primary" to="/programmes">Our programmes</Link>
-              <Link className="button button--ghost" to="/contact">Contact us</Link>
+          <div className="home-hero__inner">
+            <div className="home-hero__content">
+              <p className="section-kicker">Navigating pathways. Building futures.</p>
+              <h1 id="home-title">Guiding our People. Strengthening our Community.</h1>
+              <p className="home-hero__lede">
+                Pasifika Navigators Charitable Trust empowers Pasifika and Maori communities in Te Hiku o Te Ika through connection, culture, education, digital inclusion, wellbeing and opportunity.
+              </p>
+              <div className="home-hero__actions">
+                <Link className="button button--primary" to="/programmes">Our programmes <span aria-hidden="true">-&gt;</span></Link>
+                <Link className="button button--ghost" to="/#about">About us <span aria-hidden="true">-&gt;</span></Link>
+              </div>
+            </div>
+            <div className="home-hero__quote" aria-label="Voyage whakatauki">
+              <p>O le folauga e le gata i le mea ua e i ai nei, ae le tofa so'o fo'i lea.</p>
+              <span>The journey is not only about the voyage, but also about the hope.</span>
+            </div>
+            <div className="home-focus-grid" aria-label="Pasifika Navigators focus areas">
+              {focusAreas.map((area) => (
+                <article className="home-focus-card" key={area.title}>
+                  <div>
+                    <h2>{area.title}</h2>
+                    <p>{area.body}</p>
+                    <span aria-hidden="true" />
+                  </div>
+                </article>
+              ))}
             </div>
           </div>
         </section>
 
-        <section className="snapshot-band" aria-label="Pasifika Navigators snapshot">
-          {stats.map((item) => (
-            <div key={item.label}>
-              <span>{item.label}</span>
-              <strong>{item.value}</strong>
+        <section className="home-values" id="about" aria-labelledby="values-title">
+          <div className="home-values__inner">
+            <div className="home-values__intro">
+              <p className="section-kicker">Who we are</p>
+              <h2 id="values-title">E tu'u fa'atasi i tatou - together we rise.</h2>
             </div>
-          ))}
-        </section>
-
-        <section className="content-section content-section--intro" id="about">
-          <div className="section-heading">
-            <p className="section-kicker">About</p>
-            <h2>Connection through creative innovation.</h2>
-          </div>
-          <div className="intro-copy">
-            <p>
-              Pasifika Navigators uses technology and innovation to help individuals and families stay connected to who they are, where they come from, and where they are going.
-            </p>
-            <p>
-              Through digital tools, storytelling, learning, AI, mapping, media, and community-led innovation, we create pathways that connect the past, present, and future. We honour the stories, knowledge, culture, and values passed down through generations, while helping our people use today's tools to build confidence, opportunity, and connection for tomorrow.
-            </p>
-            <p>
-              We believe technology should strengthen identity, not replace it. Whether through talanoa, digital storytelling, online learning, creative projects, or one-on-one support, Pasifika Navigators walks alongside our communities as they navigate a changing world with culture, connection, and purpose.
-            </p>
-          </div>
-        </section>
-
-        <section className="gradient-feature">
-          <div className="gradient-feature__inner">
-            <p className="section-kicker">Our purpose</p>
-            <h2>Helping families navigate support, culture, and belonging.</h2>
-            <p>
-              We walk alongside our people with respect for language, identity, and the shared strength of Pasifika communities.
-            </p>
-          </div>
-        </section>
-
-        <section className="join-section">
-          <div>
-            <p className="section-kicker">Join Our Journey</p>
-            <h2>Stay connected with Pasifika Navigators news.</h2>
-          </div>
-          <form className="signup-form" onSubmit={(event) => event.preventDefault()}>
-            <label htmlFor="email">Your Email</label>
-            <div className="signup-form__row">
-              <input id="email" name="email" type="email" placeholder="Enter email" />
-              <button className="button button--dark" type="submit">Send</button>
+            <div className="home-values__list">
+              {values.map((value) => (
+                <article className="home-value" key={value.title}>
+                  <div>
+                    <h3>{value.title} <span>({value.label})</span></h3>
+                    <p>{value.body}</p>
+                  </div>
+                </article>
+              ))}
             </div>
-          </form>
+          </div>
         </section>
+
+        <div className="home-pattern-strip" aria-hidden="true" />
       </main>
 
       <SiteFooter id="contact" />

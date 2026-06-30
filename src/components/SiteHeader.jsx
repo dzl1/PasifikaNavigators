@@ -6,8 +6,10 @@ import { ADMIN_EMAIL } from '../lib/constants.js'
 
 const navItems = [
   { label: 'Home', href: '/#home' },
-  { label: 'Programmes', href: '/programmes' },
-  { label: 'Tech', href: '/tech' },
+  { label: 'About Us', href: '/#about' },
+  { label: 'Our Programmes', href: '/programmes', hasChevron: true },
+  { label: 'Resources', href: '/pasifika' },
+  { label: 'News & Updates', href: '/#updates' },
   { label: 'Contact', href: '/contact' },
 ]
 
@@ -56,26 +58,33 @@ export default function SiteHeader() {
         aria-label="Primary navigation"
       >
         {navItems.map((item) => (
-          <a key={item.href} href={item.href} onClick={closeMenu}>{item.label}</a>
+          <a
+            key={item.href}
+            className={item.href === '/#home' && location.pathname === '/' ? 'site-nav__link--active' : undefined}
+            href={item.href}
+            onClick={closeMenu}
+          >
+            {item.label}
+            {item.hasChevron && <span className="site-nav__chevron" aria-hidden="true" />}
+          </a>
         ))}
         {isAdmin && (
           <a className="site-nav__auth-btn site-nav__auth-btn--admin" href="/admin" onClick={closeMenu}>
             Admin
           </a>
         )}
-        {isLoggedIn ? (
+        {isLoggedIn && (
           <button
             type="button"
-            className="site-nav__auth-btn"
+            className="site-nav__auth-btn site-nav__auth-btn--secondary"
             onClick={handleLogout}
           >
             Log out
           </button>
-        ) : (
-          <a className="site-nav__auth-btn" href="/login" onClick={closeMenu}>
-            Login
-          </a>
         )}
+        <a className="site-nav__auth-btn site-nav__auth-btn--primary" href="/contact" onClick={closeMenu}>
+          Get in touch
+        </a>
       </nav>
     </header>
   )
