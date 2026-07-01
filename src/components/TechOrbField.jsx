@@ -49,19 +49,32 @@ export default function TechOrbField({ className = 'tech-orb-field', shape = 'ci
     let balls = []
 
     const cubePalette = ['#8ad8f7', '#5fc4ea', '#2f9ac8', '#1f6f99', '#124a6d', '#0a2f4d']
+    const bluePalette = ['#d4f3ff', '#9de5ff', '#63c9f2', '#2fa9da', '#167fb2', '#0b527c']
+    const hexBluePalette = ['#c9f6ff', '#82ddf4', '#42b8df', '#1f8ebd', '#146796', '#0c3f66']
     const defaultPalette = ['#f0b64a', '#238ca3', '#8f11a8', '#ffffff', '#c94f3d']
-    const palette = shape === 'cube' ? cubePalette : defaultPalette
+    const isSmallCircle = shape === 'small-circle'
+    const isCircle = shape === 'circle'
+    const palette = shape === 'cube' || isSmallCircle
+      ? cubePalette
+      : shape === 'hexagon'
+        ? hexBluePalette
+        : isCircle
+          ? bluePalette
+          : defaultPalette
 
     const buildBalls = () => {
       const nextBalls = []
-      const columns = Math.max(8, Math.floor(width / 92))
-      const rows = Math.max(5, Math.floor(height / 92))
+      const spacing = isSmallCircle ? 145 : shape === 'hexagon' ? 150 : 135
+      const minColumns = isSmallCircle ? 5 : shape === 'hexagon' ? 5 : 6
+      const minRows = isSmallCircle ? 4 : shape === 'hexagon' ? 4 : 4
+      const columns = Math.max(minColumns, Math.floor(width / spacing))
+      const rows = Math.max(minRows, Math.floor(height / spacing))
       const cellWidth = width / columns
       const cellHeight = height / rows
 
       for (let y = 0; y < rows; y += 1) {
         for (let x = 0; x < columns; x += 1) {
-          const radius = 9 + random() * 22
+          const radius = isSmallCircle ? 5 + random() * 10 : isCircle ? 5 + random() * 14 : 9 + random() * 22
           const homeX = x * cellWidth + cellWidth * (0.22 + random() * 0.62)
           const homeY = y * cellHeight + cellHeight * (0.2 + random() * 0.64)
 
@@ -74,7 +87,7 @@ export default function TechOrbField({ className = 'tech-orb-field', shape = 'ci
             vy: 0,
             radius,
             color: palette[Math.floor(random() * palette.length)],
-            alpha: 0.16 + random() * 0.24,
+            alpha: isSmallCircle ? 0.12 + random() * 0.18 : 0.16 + random() * 0.24,
             mass: radius * 0.45,
           })
         }

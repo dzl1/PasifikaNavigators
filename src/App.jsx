@@ -30,7 +30,7 @@ function HomePage() {
 
       <main>
         <section className="home-hero" id="home" aria-labelledby="home-title">
-          <TechOrbField className="home-cube-field" shape="cube" />
+          <TechOrbField className="home-cube-field" shape="small-circle" />
           <div className="home-hero__content">
             <p className="section-kicker" id="home-title">Pasifika-Led in Te Hiku</p>
             <p className="home-hero__lede">

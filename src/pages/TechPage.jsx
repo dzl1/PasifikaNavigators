@@ -149,7 +149,7 @@ export default function TechPage() {
           <TechOrbField />
           <div className="tech-hero__content">
             <p className="section-kicker">Pasifika Navigators Tech</p>
-            <h1 id="tech-title">Technology that strengthens identity.</h1>
+            <h1 id="tech-title">Technology through a Pasifika lens</h1>
             <p>
               We use digital tools, storytelling, learning, AI, mapping, media, and community-led innovation to help our people stay connected to who they are, where they come from, and where they are going.
             </p>
@@ -218,13 +218,6 @@ export default function TechPage() {
           </div>
         </section>
 
-        <section className="tech-cta">
-          <div>
-            <p className="section-kicker">Build With Us</p>
-            <h2>Have a digital idea for your family, group, or community?</h2>
-          </div>
-          <Link className="button button--dark" to="/contact">Contact Pasifika Navigators</Link>
-        </section>
       </main>
 
       <SiteFooter />

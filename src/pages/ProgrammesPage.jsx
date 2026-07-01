@@ -44,9 +44,9 @@ const programmes = [
 
 const communityProgrammes = [
   {
-    title: 'Community Support',
+    title: 'Community Sharing',
     tag: 'Navigation and advocacy',
-    description: 'Culturally grounded navigation, advocacy, and practical support for Pasifika families in Kaitaia.',
+    description: 'Culturally grounded practical support using Pasifika knowledge in Kaitaia.',
     accent: '#238ca3',
   },
   {
@@ -163,7 +163,7 @@ export default function ProgrammesPage() {
           <TechOrbField className="programmes-hex-field" shape="hexagon" />
           <div className="programmes-hero__content">
             <p className="section-kicker">Programmes</p>
-            <h1 id="programmes-title">Programmes that grow confidence, culture, and connection.</h1>
+            <h1 id="programmes-title">Innovation, Culture, Connection</h1>
             <p>
               Pasifika Navigators runs learning and innovation programmes for youth and families, working with community partners across Te Hiku.
             </p>
@@ -186,7 +186,7 @@ export default function ProgrammesPage() {
         <section className="programmes-intro">
           <div className="programmes-intro__heading">
             <p className="section-kicker">What We Run</p>
-            <h2>Practical programmes shaped around our people.</h2>
+            <h2>Create. Deliver.</h2>
           </div>
           <div className="programmes-intro__copy">
             <p>
@@ -201,7 +201,7 @@ export default function ProgrammesPage() {
         <section className="programmes-section" id="community-programmes">
           <div className="programmes-section__heading">
             <p className="section-kicker">Programmes</p>
-            <h2>Support shaped for our people.</h2>
+            <h2>Build knowledge.</h2>
           </div>
           <div className="programmes-grid">
             {communityProgrammes.map((programme) => (
@@ -210,7 +210,7 @@ export default function ProgrammesPage() {
           </div>
         </section>
 
-        <section className="programmes-section" id="programme-list">
+        <section className="programmes-section programmes-section--featured" id="programme-list">
           <div className="programmes-section__heading">
             <p className="section-kicker">Featured Programmes</p>
             <h2>From Curious Minds to Pasifika Tech.</h2>

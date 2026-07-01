@@ -180,15 +180,31 @@ textarea {
   padding: 172px clamp(18px, 5vw, 72px) 64px;
   color: #fff;
   overflow: hidden;
-  background: url("/bg.jpg") center / cover fixed no-repeat;
+  background:
+    #041633
+    url("/bg2.png")
+    center bottom / cover
+    fixed
+    no-repeat;
   isolation: isolate;
+}
+
+.home-hero::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  background: rgba(4, 22, 51, 0.01);
+  backdrop-filter: blur(4px);
+  -webkit-backdrop-filter: blur(4px);
+  pointer-events: none;
 }
 
 .home-hero::after {
   content: "";
   position: absolute;
   inset: 0;
-  z-index: 0;
+  z-index: 1;
   background:
     linear-gradient(90deg, rgba(0, 62, 116, 0.9), rgba(0, 92, 132, 0.58) 52%, rgba(35, 140, 163, 0.28)),
     radial-gradient(circle at 78% 18%, rgba(240, 182, 74, 0.24), transparent 24%);
@@ -198,7 +214,7 @@ textarea {
 .home-cube-field {
   position: absolute;
   inset: 0;
-  z-index: 0;
+  z-index: 2;
   width: 100%;
   height: 100%;
   display: block;
@@ -225,7 +241,7 @@ textarea {
 
 .home-hero__content {
   position: relative;
-  z-index: 2;
+  z-index: 3;
   width: min(780px, 100%);
   padding: clamp(20px, 3vw, 32px);
   border-radius: 8px;
@@ -302,15 +318,17 @@ textarea {
   z-index: 2;
   display: grid;
   grid-template-columns: repeat(3, minmax(0, 1fr));
-  border-top: 5px solid var(--coral);
-  border-bottom: 1px solid var(--line);
-  background: var(--paper);
+  border-top: 5px solid var(--sea);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.16);
+  background:
+    linear-gradient(90deg, rgba(4, 22, 51, 0.9), rgba(19, 58, 75, 0.66)),
+    url("/bg2.png") center top / cover fixed no-repeat;
 }
 
 .snapshot-band > div {
   min-width: 0;
   padding: 22px clamp(18px, 4vw, 56px);
-  border-right: 1px solid var(--line);
+  border-right: 1px solid rgba(255, 255, 255, 0.16);
 }
 
 .snapshot-band > div:last-child {
@@ -320,7 +338,7 @@ textarea {
 .snapshot-band span {
   display: block;
   margin-bottom: 8px;
-  color: var(--muted);
+  color: rgba(255, 255, 255, 0.72);
   font-size: 0.78rem;
   font-weight: 700;
   letter-spacing: 0;
@@ -329,8 +347,10 @@ textarea {
 
 .snapshot-band strong {
   display: block;
+  color: #fff;
   font-size: 1.2rem;
   line-height: 1.3;
+  text-shadow: 0 2px 16px rgba(0, 0, 0, 0.36);
 }
 
 .content-section {
@@ -768,7 +788,7 @@ article.programme-card:hover {
 
   .snapshot-band > div {
     border-right: 0;
-    border-bottom: 1px solid var(--line);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.16);
   }
 
   .snapshot-band > div:last-child {
@@ -853,6 +873,7 @@ article.programme-card:hover {
     padding-right: 24px;
     padding-left: 24px;
     padding-bottom: 42px;
+    background-attachment: scroll;
   }
 
   .home-hero__content {
