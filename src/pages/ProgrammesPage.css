@@ -11,7 +11,7 @@
   overflow: hidden;
   isolation: isolate;
   color: #fff;
-  background: #102d3a url("/bg1.png") center bottom / cover fixed no-repeat;
+  background: #102d3a url("/bg6.png") center bottom / cover fixed no-repeat;
 }
 
 .programmes-hero::after {
@@ -22,8 +22,6 @@
   background:
     linear-gradient(90deg, rgba(25, 99, 163, 0.9), rgba(5, 180, 255, 0.58) 52%, rgba(35, 140, 163, 0.28)),
     radial-gradient(circle at 78% 18%, rgba(240, 182, 74, 0.24), transparent 24%);
-  -webkit-backdrop-filter: blur(6px);
-  backdrop-filter: blur(6px);
   pointer-events: none;
 }
 
@@ -77,7 +75,7 @@
   border-bottom: 1px solid rgba(255, 255, 255, 0.16);
   background:
     linear-gradient(90deg, rgba(4, 22, 51, 0.9), rgba(19, 58, 75, 0.66)),
-    url("/bg1.png") center bottom / cover fixed no-repeat;
+    url("/bg6.png") center bottom / cover fixed no-repeat;
 }
 
 .programmes-strip > div {
