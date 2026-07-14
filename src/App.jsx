@@ -1,8 +1,10 @@
+import React from 'react'
 import { Routes, Route, Link, Navigate } from 'react-router-dom'
 import ContactPage from './pages/ContactPage.jsx'
 import PasifikaPage from './pages/PasifikaPage.jsx'
 import ProgrammesPage from './pages/ProgrammesPage.jsx'
 import TechPage from './pages/TechPage.jsx'
+import StorytellingPage from './pages/StorytellingPage.jsx'
 import SiteHeader from './components/SiteHeader.jsx'
 import TechOrbField from './components/TechOrbField.jsx'
 import SiteFooter from './components/SiteFooter.jsx'
@@ -107,6 +109,9 @@ export default function App() {
         <Route path="/pasifika" element={<PasifikaPage />} />
         <Route path="/programmes" element={<ProgrammesPage />} />
         <Route path="/tech" element={<TechPage />} />
+        <Route path="/storytelling" element={<StorytellingPage />} />
+        <Route path="/storytelling/:id" element={<StorytellingPage />} />
+        <Route path="/stories/:slug" element={<StorytellingPage publicStory />} />
         <Route path="/contact" element={<ContactPage />} />
 
         {/* Auth */}

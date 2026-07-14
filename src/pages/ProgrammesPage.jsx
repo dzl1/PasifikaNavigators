@@ -32,6 +32,7 @@ const programmes = [
     description:
       'Projects that help people capture stories, identity, language, and local knowledge through media, mapping, and creative digital tools.',
     accent: '#f0b64a',
+    href: '/storytelling',
   },
   {
     title: 'Community Innovation',
@@ -113,7 +114,7 @@ function ProgrammeFeatureCard({ programme }) {
       <span className="programmes-card__tag">{programme.tag}</span>
       <h3>{programme.title}</h3>
       <p>{programme.description}</p>
-      <span className="programmes-card__action">{programme.href ? 'Explore tech' : 'Programme focus'}</span>
+      <span className="programmes-card__action">{programme.href ? `Explore ${programme.title.toLowerCase()}` : 'Programme focus'}</span>
     </>
   )
 
