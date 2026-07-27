@@ -64,13 +64,18 @@ export default function SiteHeader() {
           </a>
         )}
         {isLoggedIn ? (
-          <button
-            type="button"
-            className="site-nav__auth-btn"
-            onClick={handleLogout}
-          >
-            Log out
-          </button>
+          <>
+            <a className="site-nav__auth-btn" href="/profile" onClick={closeMenu}>
+              Profile
+            </a>
+            <button
+              type="button"
+              className="site-nav__auth-btn"
+              onClick={handleLogout}
+            >
+              Log out
+            </button>
+          </>
         ) : (
           <a className="site-nav__auth-btn" href="/login" onClick={closeMenu}>
             Login

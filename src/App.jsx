@@ -15,7 +15,9 @@ import MessagesPage from './pages/admin/MessagesPage.jsx'
 import PathwaysPage from './pages/admin/PathwaysPage.jsx'
 import RegisterPage from './pages/admin/RegisterPage.jsx'
 import ResetPasswordPage from './pages/admin/ResetPasswordPage.jsx'
+import ProfilePage from './pages/ProfilePage.jsx'
 import ProtectedRoute from './components/ProtectedRoute.jsx'
+import AuthRecoveryRedirect from './components/AuthRecoveryRedirect.jsx'
 import { AuthProvider } from './context/AuthContext.jsx'
 import './App.css'
 
@@ -104,6 +106,7 @@ function HomePage() {
 export default function App() {
   return (
     <AuthProvider>
+      <AuthRecoveryRedirect />
       <Routes>
         <Route path="/" element={<HomePage />} />
         <Route path="/pasifika" element={<PasifikaPage />} />
@@ -118,6 +121,14 @@ export default function App() {
         <Route path="/login" element={<LoginPage />} />
         <Route path="/register" element={<RegisterPage />} />
         <Route path="/reset-password" element={<ResetPasswordPage />} />
+        <Route
+          path="/profile"
+          element={
+            <ProtectedRoute adminOnly={false}>
+              <ProfilePage />
+            </ProtectedRoute>
+          }
+        />
         <Route
           path="/admin"
           element={

@@ -5,7 +5,7 @@ import { isSupabaseConfigured } from '../../lib/supabaseClient.js'
 import logoColor from '../../data/images/logo.png'
 import '../../pages/admin/admin.css'
 
-const PRODUCTION_URL = 'https://www.localmapr.com'
+const PRODUCTION_URL = 'https://www.pasifikanavigators.nz'
 
 export default function LoginPage() {
   const { signIn, resetPasswordForEmail } = useAuth()
@@ -64,7 +64,8 @@ export default function LoginPage() {
     // Password-reset emails must always point at the deployed app. Using the
     // browser origin here makes emails requested during local testing contain
     // a localhost URL.
-    const redirectTo = `${PRODUCTION_URL}/reset-password`
+    const appUrl = (import.meta.env.VITE_APP_URL || PRODUCTION_URL).replace(/\/$/, '')
+    const redirectTo = `${appUrl}/reset-password`
     const { error: resetError } = await resetPasswordForEmail(trimmedEmail, redirectTo)
     setLoading(false)
 

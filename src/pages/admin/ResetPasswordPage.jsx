@@ -8,13 +8,16 @@ import './admin.css'
 const MIN_PASSWORD_LENGTH = 8
 
 export default function ResetPasswordPage() {
-  const { updatePassword, signOut } = useAuth()
+  const { session, updatePassword, signOut, finishPasswordRecovery } = useAuth()
 
   const [password, setPassword] = useState('')
   const [confirmPassword, setConfirmPassword] = useState('')
   const [error, setError] = useState('')
   const [loading, setLoading] = useState(false)
   const [done, setDone] = useState(false)
+  const linkError = typeof window === 'undefined'
+    ? ''
+    : new URLSearchParams(window.location.hash.replace(/^#/, '')).get('error_description')?.replace(/\+/g, ' ') ?? ''
 
   const validate = () => {
     if (password.length < MIN_PASSWORD_LENGTH) {
@@ -50,6 +53,7 @@ export default function ResetPasswordPage() {
       return
     }
 
+    finishPasswordRecovery()
     await signOut()
     setLoading(false)
     setDone(true)
@@ -76,6 +80,25 @@ export default function ResetPasswordPage() {
     )
   }
 
+  if (session === null) {
+    return (
+      <div className="login-shell">
+        <div className="login-card">
+          <div className="login-card__brand">
+            <img src={logoColor} alt="Pasifika Navigators" />
+          </div>
+          <div className="login-card__header">
+            <h1>Reset link unavailable</h1>
+            <p>{linkError || 'This password reset link is invalid or has expired.'}</p>
+          </div>
+          <Link className="button button--primary login-form__submit" to="/login">
+            Request a new reset link
+          </Link>
+        </div>
+      </div>
+    )
+  }
+
   return (
     <div className="login-shell">
       <div className="login-card">
@@ -85,7 +108,11 @@ export default function ResetPasswordPage() {
 
         <div className="login-card__header">
           <h1>Choose new password</h1>
-          <p>Enter a new password for your Pasifika Navigators account.</p>
+          <p>
+            {session
+              ? 'Enter a new password for your Pasifika Navigators account.'
+              : 'Checking your secure password reset link…'}
+          </p>
         </div>
 
         <form className="login-form" onSubmit={handleSubmit} noValidate>
@@ -103,7 +130,7 @@ export default function ResetPasswordPage() {
               value={password}
               onChange={(event) => setPassword(event.target.value)}
               placeholder="••••••••"
-              disabled={loading}
+              disabled={loading || !session}
             />
           </div>
 
@@ -118,7 +145,7 @@ export default function ResetPasswordPage() {
               value={confirmPassword}
               onChange={(event) => setConfirmPassword(event.target.value)}
               placeholder="••••••••"
-              disabled={loading}
+              disabled={loading || !session}
             />
           </div>
 
@@ -129,7 +156,7 @@ export default function ResetPasswordPage() {
           <button
             type="submit"
             className="button button--primary login-form__submit"
-            disabled={loading || !password || !confirmPassword}
+            disabled={loading || !session || !password || !confirmPassword}
           >
             {loading ? 'Updating password…' : 'Update password'}
           </button>
