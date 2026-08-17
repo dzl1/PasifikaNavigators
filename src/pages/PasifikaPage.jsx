@@ -4,6 +4,8 @@ import HeroHoverEffect from '../components/HeroHoverEffect.jsx'
 import SiteHeader from '../components/SiteHeader.jsx'
 import './PasifikaPage.css'
 
+const SHOW_KAITAIA_OPENING_CEREMONY = false
+
 function createCalendarUrl({ title, startDate, endDate, nativeName, theme }) {
   const details = `${nativeName} - ${theme}`
   const params = new URLSearchParams({
@@ -367,7 +369,9 @@ function LanguageCard({ week, isFeatured, status }) {
   const actions = [
     { label: 'Official info', href: week.infoUrl, tone: 'primary', external: true },
     week.resourceUrl ? { label: week.resourceLabel, href: week.resourceUrl, tone: 'muted', external: true } : null,
-    week.ceremonyUrl ? { label: 'Kaitaia Opening Ceremony', href: week.ceremonyUrl, tone: 'secondary', external: false } : null,
+    SHOW_KAITAIA_OPENING_CEREMONY && week.ceremonyUrl
+      ? { label: 'Kaitaia Opening Ceremony', href: week.ceremonyUrl, tone: 'secondary', external: false }
+      : null,
     { label: 'Add to calendar', href: week.calendarUrl, tone: 'outline', external: true },
   ].filter(Boolean)
 
@@ -481,6 +485,21 @@ export default function PasifikaPage() {
           </div>
         </section>
 
+        <section className="pasifika-section pasifika-section--feature" id="phrases">
+          <div className="pasifika-section__heading">
+            <p className="pasifika-kicker">Gagana Samoa</p>
+            <h2>Starter phrases</h2>
+          </div>
+          <div className="phrase-grid">
+            {phrases.map((phrase, i) => (
+              <article key={i} className="phrase-card">
+                <strong>{phrase.gagana}</strong>
+                <span>{phrase.english}</span>
+              </article>
+            ))}
+          </div>
+        </section>
+
         <section className="pasifika-section" id="weeks">
           <div className="pasifika-section__heading">
             <p className="pasifika-kicker">Language week library</p>
@@ -498,7 +517,7 @@ export default function PasifikaPage() {
           </div>
         </section>
 
-        <section
+        {SHOW_KAITAIA_OPENING_CEREMONY && <section
           className="pasifika-section pasifika-section--ceremony"
           id="opening-ceremony"
           ref={ceremonyRef}
@@ -544,22 +563,8 @@ export default function PasifikaPage() {
               </div>
             </div>
           )}
-        </section>
+        </section>}
 
-        <section className="pasifika-section pasifika-section--feature" id="phrases">
-          <div className="pasifika-section__heading">
-            <p className="pasifika-kicker">Gagana Samoa</p>
-            <h2>Starter phrases</h2>
-          </div>
-          <div className="phrase-grid">
-            {phrases.map((phrase, i) => (
-              <article key={i} className="phrase-card">
-                <strong>{phrase.gagana}</strong>
-                <span>{phrase.english}</span>
-              </article>
-            ))}
-          </div>
-        </section>
       </main>
     </div>
   )
