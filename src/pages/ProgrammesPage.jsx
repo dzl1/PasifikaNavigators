@@ -99,15 +99,6 @@ const partnerOrganisations = [
 
 const carouselOrganisations = [...partnerOrganisations, ...partnerOrganisations]
 
-const deliveryAreas = [
-  'Digital skills workshops',
-  'Creative technology classes',
-  'Storytelling and media projects',
-  'Mapping and place-based learning',
-  'AI and emerging technology support',
-  'Culturally grounded programme design',
-]
-
 function ProgrammeFeatureCard({ programme }) {
   const content = (
     <>
@@ -223,21 +214,6 @@ export default function ProgrammesPage() {
           </div>
         </section>
 
-        <section className="gradient-feature programmes-feature">
-          <div className="gradient-feature__inner programmes-feature__inner">
-            <p className="section-kicker">How We Deliver</p>
-            <h2>Learning that is hands-on, culturally grounded, and community led.</h2>
-            <p>
-              We support workshops, classes, community projects, and client work that turn ideas into practical outcomes. The focus is always on confidence, access, creativity, and connection.
-            </p>
-            <div className="programmes-feature__list" aria-label="Programme delivery areas">
-              {deliveryAreas.map((area) => (
-                <span key={area}>{area}</span>
-              ))}
-            </div>
-          </div>
-        </section>
-
         <section className="programmes-section programmes-section--partners" id="organisations">
           <div className="programmes-section__heading">
             <p className="section-kicker">Clients and Partners</p>
@@ -260,13 +236,6 @@ export default function ProgrammesPage() {
           </div>
         </section>
 
-        <section className="programmes-cta">
-          <div>
-            <p className="section-kicker">Start a Talanoa</p>
-            <h2>Have a programme, class, or community project in mind?</h2>
-          </div>
-          <Link className="button button--primary" to="/contact">Contact Pasifika Navigators</Link>
-        </section>
       </main>
 
       <SiteFooter />

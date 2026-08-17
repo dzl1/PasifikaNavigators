@@ -1,9 +1,7 @@
-import { useEffect, useRef } from 'react'
 import { Link } from 'react-router-dom'
 import SiteHeader from '../components/SiteHeader.jsx'
 import TechOrbField from '../components/TechOrbField.jsx'
 import SiteFooter from '../components/SiteFooter.jsx'
-import logoWhite from '../data/images/logo_white.png'
 import './TechPage.css'
 
 const techFocus = [
@@ -42,102 +40,6 @@ const techProjects = [
     description: 'Admin tools, contact pathways, and community data practices designed around care, trust, and local leadership.',
   },
 ]
-
-const orbitNodes = [
-  { label: 'AI', angle: -Math.PI / 2 },
-  { label: 'Map', angle: 0 },
-  { label: 'Story', angle: Math.PI / 2 },
-  { label: 'Learn', angle: Math.PI },
-]
-
-function TechApproachVisual() {
-  const visualRef = useRef(null)
-  const orbitRef = useRef(null)
-  const nodeRefs = useRef([])
-
-  useEffect(() => {
-    const visual = visualRef.current
-    const orbit = orbitRef.current
-
-    if (!visual || !orbit) return undefined
-
-    const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches
-    let frameId = 0
-    let geometry = null
-
-    const measure = () => {
-      const visualRect = visual.getBoundingClientRect()
-      const orbitRect = orbit.getBoundingClientRect()
-
-      geometry = {
-        centerX: orbitRect.left - visualRect.left + orbitRect.width / 2,
-        centerY: orbitRect.top - visualRect.top + orbitRect.height / 2,
-        radiusX: orbitRect.width / 2,
-        radiusY: orbitRect.height / 2,
-      }
-    }
-
-    const positionNodes = (elapsed = 0) => {
-      if (!geometry) measure()
-      const rotation = reduceMotion ? 0 : (elapsed / 30000) * Math.PI * 2
-
-      orbitNodes.forEach((node, index) => {
-        const element = nodeRefs.current[index]
-        if (!element) return
-
-        const angle = node.angle + rotation
-        const x = geometry.centerX + Math.cos(angle) * geometry.radiusX
-        const y = geometry.centerY + Math.sin(angle) * geometry.radiusY
-
-        element.style.left = `${x}px`
-        element.style.top = `${y}px`
-      })
-    }
-
-    const animate = (time) => {
-      positionNodes(time)
-      frameId = window.requestAnimationFrame(animate)
-    }
-
-    const observer = new ResizeObserver(() => {
-      measure()
-      positionNodes()
-    })
-    observer.observe(visual)
-    measure()
-    positionNodes()
-
-    if (!reduceMotion) {
-      frameId = window.requestAnimationFrame(animate)
-    }
-
-    return () => {
-      window.cancelAnimationFrame(frameId)
-      observer.disconnect()
-    }
-  }, [])
-
-  return (
-    <div className="tech-feature__visual" ref={visualRef} aria-hidden="true">
-      <div className="tech-orbit tech-orbit--one" ref={orbitRef} />
-      <div className="tech-orbit tech-orbit--two" />
-      <div className="tech-node tech-node--center">
-        <img src={logoWhite} alt="" />
-      </div>
-      {orbitNodes.map((node, index) => (
-        <div
-          className="tech-node tech-node--orbit"
-          key={node.label}
-          ref={(element) => {
-            nodeRefs.current[index] = element
-          }}
-        >
-          {node.label}
-        </div>
-      ))}
-    </div>
-  )
-}
 
 export default function TechPage() {
   return (
@@ -188,17 +90,6 @@ export default function TechPage() {
                 <p>{item.description}</p>
               </article>
             ))}
-          </div>
-        </section>
-
-        <section className="tech-feature">
-          <TechApproachVisual />
-          <div className="tech-feature__copy">
-            <p className="section-kicker">Our Approach</p>
-            <h2>Innovation should bring people closer to themselves.</h2>
-            <p>
-              Technology is most powerful when it carries people, not replaces them. Pasifika Navigators uses today&apos;s tools to honour inherited knowledge, support everyday needs, and create new pathways for tomorrow.
-            </p>
           </div>
         </section>
 

@@ -213,6 +213,14 @@ function getFeaturedLanguageWeek(today = getTodayDate()) {
   }) ?? languageWeeks[0]
 }
 
+function getLanguageWeekStatus(week, today = getTodayDate()) {
+  const range = getWeekDateRange(week)
+
+  if (range && today >= range.start && today < range.end) return 'Current'
+
+  return 'Upcoming'
+}
+
 function formatShortDateRange(week) {
   const range = getWeekDateRange(week)
   if (!range) return week.dates
@@ -355,7 +363,7 @@ function formatAgendaDetail(detail) {
   return segments
 }
 
-function LanguageCard({ week, isFeatured }) {
+function LanguageCard({ week, isFeatured, status }) {
   const actions = [
     { label: 'Official info', href: week.infoUrl, tone: 'primary', external: true },
     week.resourceUrl ? { label: week.resourceLabel, href: week.resourceUrl, tone: 'muted', external: true } : null,
@@ -371,7 +379,7 @@ function LanguageCard({ week, isFeatured }) {
           <h3>{week.language}</h3>
           <p className="language-card__native">{week.nativeName}</p>
         </div>
-        {isFeatured && <span className="language-card__label">Upcoming</span>}
+        {isFeatured && <span className="language-card__label">{status}</span>}
       </div>
       <div className="language-card__dates">{week.dates}</div>
       <p className="language-card__theme">
@@ -428,6 +436,7 @@ export default function PasifikaPage() {
   const location = useLocation()
   const ceremonyRef = useRef(null)
   const featuredWeek = getFeaturedLanguageWeek()
+  const featuredWeekStatus = getLanguageWeekStatus(featuredWeek)
 
   useEffect(() => {
     if (location.hash === '#opening-ceremony') {
@@ -455,7 +464,7 @@ export default function PasifikaPage() {
 
         <section className="pasifika-strip" aria-label={`${featuredWeek.language} snapshot`}>
           <div>
-            <span>Upcoming</span>
+            <span>{featuredWeekStatus}</span>
             <strong>{featuredWeek.nativeName}</strong>
           </div>
           <div>
@@ -479,7 +488,12 @@ export default function PasifikaPage() {
           </div>
           <div className="language-grid" aria-live="polite">
             {languageWeeks.map((week, i) => (
-              <LanguageCard key={i} week={week} isFeatured={week === featuredWeek} />
+              <LanguageCard
+                key={i}
+                week={week}
+                isFeatured={week === featuredWeek}
+                status={featuredWeekStatus}
+              />
             ))}
           </div>
         </section>
