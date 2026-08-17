@@ -1,0 +1,110 @@
+{
+  "Rotuma Language Week": {
+    "languageName": "Fäeag Rotuạm",
+    "phrases": [
+      { "native": "Noa'ia", "english": "Hello" },
+      { "native": "Fạiåkse'ea", "english": "Thank you" },
+      { "native": "Figalelei", "english": "Please" },
+      { "native": "Ka 'äe tapen?", "english": "How are you?" }
+    ]
+  },
+  "Samoa Language Week": {
+    "languageName": "Gagana Samoa",
+    "phrases": [
+      { "native": "Talofa lava", "english": "Hello" },
+      { "native": "Fa'afetai", "english": "Thank you" },
+      { "native": "Fa'amolemole", "english": "Please" },
+      { "native": "Manuia le vaiaso o le gagana Samoa", "english": "Happy Samoa Language Week" }
+    ]
+  },
+  "Kiribati Language Week": {
+    "languageName": "Te Taetae ni Kiribati",
+    "phrases": [
+      { "native": "Mauri", "english": "Hello" },
+      { "native": "Ko rabwa", "english": "Thank you" },
+      { "native": "Taiaoka", "english": "Please" },
+      { "native": "Ko uara?", "english": "How are you?" }
+    ]
+  },
+  "Vanuatu Bislama Language Week": {
+    "languageName": "Vanuatu Bislama",
+    "phrases": [
+      { "native": "Halo", "english": "Hello" },
+      { "native": "Tankyu", "english": "Thank you" },
+      { "native": "Plis", "english": "Please" },
+      { "native": "Yu olsem wanem?", "english": "How are you?" }
+    ]
+  },
+  "Cook Islands Maori Language Week": {
+    "languageName": "Kūki ‘Āirani Māori",
+    "phrases": [
+      { "native": "Kia orāna", "english": "Hello" },
+      { "native": "Meitaki ma'ata", "english": "Thank you very much" },
+      { "native": "Kā kite", "english": "See you later" },
+      { "native": "Pē'ea koe?", "english": "How are you?" }
+    ]
+  },
+  "Tonga Language Week": {
+    "languageName": "Lea Faka-Tonga",
+    "phrases": [
+      { "native": "Mālō e lelei", "english": "Hello" },
+      { "native": "Mālō ‘aupito", "english": "Thank you very much" },
+      { "native": "Fakamolemole / Kātaki", "english": "Please" },
+      { "native": "‘Okú ke fēfē hake?", "english": "How are you?" }
+    ]
+  },
+  "Papua New Guinea Pidgin Language Week": {
+    "languageName": "Papua Niugini Tok Pisin",
+    "phrases": [
+      { "native": "Halo", "english": "Hello" },
+      { "native": "Tenkyu tru", "english": "Thank you very much" },
+      { "native": "Plis", "english": "Please" },
+      { "native": "Yu stap gut?", "english": "How are you?" }
+    ]
+  },
+  "Tuvalu Language Week": {
+    "languageName": "Te 'Gana Tuvalu",
+    "phrases": [
+      { "native": "Tālofa", "english": "Hello" },
+      { "native": "Fakafetai", "english": "Thank you" },
+      { "native": "Fakamolemole", "english": "Please" },
+      { "native": "E ā koe?", "english": "How are you?" }
+    ]
+  },
+  "Fijian Language Week": {
+    "languageName": "Vosa Vakaviti",
+    "phrases": [
+      { "native": "Ni sa bula vinaka", "english": "Hello" },
+      { "native": "Vinaka vakalevu", "english": "Thank you very much" },
+      { "native": "Kerekere", "english": "Please" },
+      { "native": "Vacava tiko?", "english": "How are you?" }
+    ]
+  },
+  "Niue Language Week": {
+    "languageName": "Vagahau Niue",
+    "phrases": [
+      { "native": "Fakaalofa lahi atu", "english": "Hello" },
+      { "native": "Fakaaue lahi", "english": "Thank you very much" },
+      { "native": "Fakamolemole", "english": "Please" },
+      { "native": "Malolō nakai a koe?", "english": "How are you?" }
+    ]
+  },
+  "Tokelau Language Week": {
+    "languageName": "Te Gagana Tokelau",
+    "phrases": [
+      { "native": "Mālo ni", "english": "Hello" },
+      { "native": "Fakafetai", "english": "Thank you" },
+      { "native": "Fakamolemole", "english": "Please" },
+      { "native": "E ā mai koe?", "english": "How are you?" }
+    ]
+  },
+  "Solomon Islands Pidgin Language Week": {
+    "languageName": "Solomon Aelan Pijin",
+    "phrases": [
+      { "native": "Halo", "english": "Hello" },
+      { "native": "Tagio tumas", "english": "Thank you very much" },
+      { "native": "Hao nao yu?", "english": "How are you?" },
+      { "native": "Lukim yu bihaen", "english": "See you later" }
+    ]
+  }
+}

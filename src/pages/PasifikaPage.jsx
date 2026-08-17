@@ -2,6 +2,7 @@ import { useState, useEffect, useRef } from 'react'
 import { useLocation } from 'react-router-dom'
 import HeroHoverEffect from '../components/HeroHoverEffect.jsx'
 import SiteHeader from '../components/SiteHeader.jsx'
+import starterPhrasesByWeek from '../data/languageWeekPhrases.json'
 import './PasifikaPage.css'
 
 const SHOW_KAITAIA_OPENING_CEREMONY = false
@@ -300,13 +301,6 @@ const hymns = [
   },
 ]
 
-const phrases = [
-  { gagana: 'Talofa lava', english: 'Hello' },
-  { gagana: "Fa'afetai", english: 'Thank you' },
-  { gagana: "Fa'amolemole", english: 'Please' },
-  { gagana: 'Manuia le vaiaso o le gagana Samoa', english: 'Happy Samoa Language Week' },
-]
-
 function escapeRegExp(value) {
   return value.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')
 }
@@ -441,6 +435,7 @@ export default function PasifikaPage() {
   const ceremonyRef = useRef(null)
   const featuredWeek = getFeaturedLanguageWeek()
   const featuredWeekStatus = getLanguageWeekStatus(featuredWeek)
+  const starterPhraseSet = starterPhrasesByWeek[featuredWeek.language]
 
   useEffect(() => {
     if (location.hash === '#opening-ceremony') {
@@ -485,20 +480,20 @@ export default function PasifikaPage() {
           </div>
         </section>
 
-        <section className="pasifika-section pasifika-section--feature" id="phrases">
+        {starterPhraseSet && <section className="pasifika-section pasifika-section--feature" id="phrases">
           <div className="pasifika-section__heading">
-            <p className="pasifika-kicker">Gagana Samoa</p>
+            <p className="pasifika-kicker">{starterPhraseSet.languageName}</p>
             <h2>Starter phrases</h2>
           </div>
           <div className="phrase-grid">
-            {phrases.map((phrase, i) => (
-              <article key={i} className="phrase-card">
-                <strong>{phrase.gagana}</strong>
+            {starterPhraseSet.phrases.map((phrase) => (
+              <article key={phrase.native} className="phrase-card">
+                <strong>{phrase.native}</strong>
                 <span>{phrase.english}</span>
               </article>
             ))}
           </div>
-        </section>
+        </section>}
 
         <section className="pasifika-section" id="weeks">
           <div className="pasifika-section__heading">
