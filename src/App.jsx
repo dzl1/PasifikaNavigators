@@ -18,7 +18,6 @@ import RegisterPage from './pages/admin/RegisterPage.jsx'
 import ResetPasswordPage from './pages/admin/ResetPasswordPage.jsx'
 import ProfilePage from './pages/ProfilePage.jsx'
 import ProtectedRoute from './components/ProtectedRoute.jsx'
-import AuthRecoveryRedirect from './components/AuthRecoveryRedirect.jsx'
 import { AuthProvider } from './context/AuthContext.jsx'
 import './App.css'
 
@@ -209,7 +208,6 @@ function HomePage() {
 export default function App() {
   return (
     <AuthProvider>
-      <AuthRecoveryRedirect />
       <Routes>
         <Route path="/" element={<HomePage />} />
         <Route path="/pasifika" element={<PasifikaPage />} />

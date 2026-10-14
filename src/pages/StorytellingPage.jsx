@@ -5,7 +5,7 @@ import 'leaflet/dist/leaflet.css'
 import SiteHeader from '../components/SiteHeader.jsx'
 import SiteFooter from '../components/SiteFooter.jsx'
 import { useAuth } from '../context/AuthContext.jsx'
-import { isSupabaseConfigured, supabase } from '../lib/supabaseClient.js'
+import { apiRequest, isApiConfigured } from '../lib/apiClient.js'
 import './StorytellingPage.css'
 
 const DEFAULT_CENTER = [-35.114, 173.263]
@@ -107,12 +107,12 @@ function StoryLibrary({ session }) {
   const [error, setError] = useState('')
 
   useEffect(() => {
-    if (!session || !isSupabaseConfigured) {
+    if (!session || !isApiConfigured) {
       setLoading(false)
       return
     }
     let active = true
-    supabase.from('stories').select('*').eq('owner_id', session.user.id).order('updated_at', { ascending: false })
+    apiRequest('/stories')
       .then(({ data, error: queryError }) => {
         if (!active) return
         setStories(data ?? [])
@@ -127,12 +127,10 @@ function StoryLibrary({ session }) {
     setCreating(true)
     setError('')
     const title = 'My new story'
-    const { data, error: insertError } = await supabase.from('stories').insert({
-      owner_id: session.user.id,
-      title,
-      slug: makeSlug(title),
-      points: [],
-    }).select('id').single()
+    const { data, error: insertError } = await apiRequest('/stories', {
+      method: 'POST',
+      body: { title, slug: makeSlug(title), points: [] },
+    })
     setCreating(false)
     if (insertError) {
       setError(insertError.message)
@@ -151,7 +149,7 @@ function StoryLibrary({ session }) {
             <h1>Stories rooted in place.</h1>
             <p>Create a journey across the map, connecting places with memories, images, knowledge, and the voices of our communities.</p>
             {session ? (
-              <button className="button button--primary" type="button" onClick={createStory} disabled={creating || !isSupabaseConfigured}>
+              <button className="button button--primary" type="button" onClick={createStory} disabled={creating || !isApiConfigured}>
                 {creating ? 'Creating…' : 'Create a story'}
               </button>
             ) : (
@@ -217,14 +215,15 @@ function StoryExperience({ session, isPublic = false }) {
   const [error, setError] = useState('')
 
   useEffect(() => {
-    if (!isSupabaseConfigured || (!isPublic && !session)) {
+    if (!isApiConfigured || (!isPublic && !session)) {
       setLoading(false)
       return
     }
     let active = true
-    let query = supabase.from('stories').select('*')
-    query = isPublic ? query.eq('slug', slug).eq('is_published', true) : query.eq('id', id).eq('owner_id', session.user.id)
-    query.single().then(({ data, error: queryError }) => {
+    const request = isPublic
+      ? apiRequest(`/public/stories/${encodeURIComponent(slug)}`, { auth: false })
+      : apiRequest(`/stories/${encodeURIComponent(id)}`)
+    request.then(({ data, error: queryError }) => {
       if (!active) return
       if (queryError) setError(isPublic ? 'This story is not available.' : queryError.message)
       if (data) {
@@ -253,9 +252,10 @@ function StoryExperience({ session, isPublic = false }) {
   const save = async () => {
     if (!story || isPublic) return
     setSaving(true); setError(''); setMessage('')
-    const { data, error: updateError } = await supabase.from('stories').update({
-      title: title.trim() || 'Untitled story', description: description.trim(), points, is_published: published,
-    }).eq('id', story.id).eq('owner_id', session.user.id).select().single()
+    const { data, error: updateError } = await apiRequest(`/stories/${story.id}`, {
+      method: 'PATCH',
+      body: { title: title.trim() || 'Untitled story', description: description.trim(), points, is_published: published },
+    })
     setSaving(false)
     if (updateError) setError(updateError.message)
     else { setStory(data); setMessage('Story saved.') }
@@ -263,7 +263,7 @@ function StoryExperience({ session, isPublic = false }) {
 
   const removeStory = async () => {
     if (!story || !window.confirm(`Delete “${title}”? This cannot be undone.`)) return
-    const { error: deleteError } = await supabase.from('stories').delete().eq('id', story.id).eq('owner_id', session.user.id)
+    const { error: deleteError } = await apiRequest(`/stories/${story.id}`, { method: 'DELETE' })
     if (deleteError) setError(deleteError.message); else navigate('/storytelling')
   }
 

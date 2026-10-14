@@ -3,7 +3,7 @@ import HeroHoverEffect from '../components/HeroHoverEffect.jsx'
 import TechOrbField from '../components/TechOrbField.jsx'
 import SiteHeader from '../components/SiteHeader.jsx'
 import SiteFooter from '../components/SiteFooter.jsx'
-import { isSupabaseConfigured, supabase } from '../lib/supabaseClient.js'
+import { apiRequest, isApiConfigured } from '../lib/apiClient.js'
 
 const initialForm = {
   name: '',
@@ -32,7 +32,7 @@ export default function ContactPage() {
     event.preventDefault()
     setFeedback('')
 
-    if (!isSupabaseConfigured) {
+    if (!isApiConfigured) {
       setStatus('error')
       setFeedback('Contact form storage is not configured yet.')
       return
@@ -48,12 +48,10 @@ export default function ContactPage() {
       source: 'website_contact_page',
     }
 
-    const { error } = await supabase
-      .from('contact_messages')
-      .insert([payload])
+    const { error } = await apiRequest('/contact', { method: 'POST', body: payload, auth: false })
 
     if (error) {
-      console.error('Supabase error (contact_messages insert):', error)
+      console.error('API error (contact message):', error)
       setStatus('error')
       setFeedback('Something went wrong while sending your message. Please try again.')
       return

@@ -1,71 +1,64 @@
 import { createContext, useContext, useEffect, useState } from 'react'
-import { supabase, isSupabaseConfigured } from '../lib/supabaseClient.js'
+import { EventType } from '@azure/msal-browser'
+import { isAuthConfigured, loginScopes, msal } from '../lib/msal.js'
 
 const AuthContext = createContext(null)
 
-function hasRecoveryParams() {
-  if (typeof window === 'undefined') return false
-  return new URLSearchParams(window.location.hash.replace(/^#/, '')).get('type') === 'recovery'
+// Keeps the { user: { id, email } } shape the pages already rely on.
+function toSession(account) {
+  if (!account) return null
+  const claims = account.idTokenClaims ?? {}
+  return {
+    account,
+    user: {
+      id: claims.oid ?? account.localAccountId,
+      email: (claims.email ?? account.username ?? '').toLowerCase(),
+      name: claims.name ?? '',
+    },
+  }
+}
+
+function startPage(from) {
+  return new URL(from || '/', window.location.origin).href
 }
 
 export function AuthProvider({ children }) {
-  const [session, setSession] = useState(undefined) // undefined = loading
-  const [isPasswordRecovery, setIsPasswordRecovery] = useState(hasRecoveryParams)
+  const [session, setSession] = useState(() => toSession(msal?.getActiveAccount()))
 
   useEffect(() => {
-    if (!isSupabaseConfigured) {
-      setSession(null)
-      return
-    }
+    if (!msal) return undefined
 
-    supabase.auth.getSession().then(({ data }) => {
-      setSession(data.session ?? null)
-    })
-
-    const { data: listener } = supabase.auth.onAuthStateChange((event, newSession) => {
-      setSession(newSession ?? null)
-      if (event === 'PASSWORD_RECOVERY') {
-        setIsPasswordRecovery(true)
+    const callbackId = msal.addEventCallback((event) => {
+      if (event.eventType === EventType.LOGIN_SUCCESS && event.payload?.account) {
+        msal.setActiveAccount(event.payload.account)
+      }
+      if (
+        event.eventType === EventType.LOGIN_SUCCESS
+        || event.eventType === EventType.LOGOUT_SUCCESS
+        || event.eventType === EventType.ACTIVE_ACCOUNT_CHANGED
+      ) {
+        setSession(toSession(msal.getActiveAccount()))
       }
     })
 
-    return () => listener.subscription.unsubscribe()
+    return () => {
+      if (callbackId) msal.removeEventCallback(callbackId)
+    }
   }, [])
 
-  const signIn = (email, password) =>
-    supabase.auth.signInWithPassword({ email, password })
+  // Sign-in, sign-up, and password reset all happen on the Entra External ID
+  // hosted pages; the browser returns to `from` afterwards.
+  const signIn = ({ from, loginHint } = {}) =>
+    msal.loginRedirect({ scopes: loginScopes, redirectStartPage: startPage(from), loginHint, prompt: 'login' })
 
-  const signOut = async () => {
-    setIsPasswordRecovery(false)
-    return supabase.auth.signOut()
-  }
+  const signUp = ({ from } = {}) =>
+    msal.loginRedirect({ scopes: loginScopes, redirectStartPage: startPage(from), prompt: 'create' })
 
-  const signUp = (email, password) =>
-    supabase.auth.signUp({ email, password })
-
-  const resetPasswordForEmail = (email, redirectTo) =>
-    supabase.auth.resetPasswordForEmail(email, { redirectTo })
-
-  const updatePassword = (password) =>
-    supabase.auth.updateUser({ password })
-
-  const updateProfile = (profile) =>
-    supabase.auth.updateUser({ data: profile })
-
-  const finishPasswordRecovery = () => setIsPasswordRecovery(false)
+  const signOut = () =>
+    msal.logoutRedirect({ account: msal.getActiveAccount() ?? undefined })
 
   return (
-    <AuthContext.Provider value={{
-      session,
-      isPasswordRecovery,
-      signIn,
-      signOut,
-      signUp,
-      resetPasswordForEmail,
-      updatePassword,
-      updateProfile,
-      finishPasswordRecovery,
-    }}>
+    <AuthContext.Provider value={{ session, isAuthConfigured, signIn, signUp, signOut }}>
       {children}
     </AuthContext.Provider>
   )

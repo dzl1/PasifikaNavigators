@@ -1,102 +1,32 @@
 import { useState } from 'react'
 import { Link } from 'react-router-dom'
 import { useAuth } from '../../context/AuthContext.jsx'
-import { isSupabaseConfigured } from '../../lib/supabaseClient.js'
 import logoColor from '../../data/images/logo.png'
 import './admin.css'
 
-const MIN_PASSWORD_LENGTH = 8
-
+// Password resets are handled by Microsoft Entra's hosted sign-in page. This
+// route remains so older reset links and bookmarks land somewhere useful.
 export default function ResetPasswordPage() {
-  const { session, updatePassword, signOut, finishPasswordRecovery } = useAuth()
-
-  const [password, setPassword] = useState('')
-  const [confirmPassword, setConfirmPassword] = useState('')
+  const { session, isAuthConfigured, signIn } = useAuth()
   const [error, setError] = useState('')
   const [loading, setLoading] = useState(false)
-  const [done, setDone] = useState(false)
-  const linkError = typeof window === 'undefined'
-    ? ''
-    : new URLSearchParams(window.location.hash.replace(/^#/, '')).get('error_description')?.replace(/\+/g, ' ') ?? ''
 
-  const validate = () => {
-    if (password.length < MIN_PASSWORD_LENGTH) {
-      return `Password must be at least ${MIN_PASSWORD_LENGTH} characters.`
-    }
-    if (password !== confirmPassword) {
-      return 'Passwords do not match.'
-    }
-    return null
-  }
-
-  const handleSubmit = async (event) => {
-    event.preventDefault()
+  const handleReset = async () => {
     setError('')
 
-    const validationError = validate()
-    if (validationError) {
-      setError(validationError)
-      return
-    }
-
-    if (!isSupabaseConfigured) {
+    if (!isAuthConfigured) {
       setError('Authentication is not configured yet.')
       return
     }
 
     setLoading(true)
-    const { error: updateError } = await updatePassword(password)
-
-    if (updateError) {
+    try {
+      await signIn({ from: '/profile', loginHint: session?.user?.email || undefined })
+    } catch (authError) {
+      console.error('Sign-in error:', authError)
       setLoading(false)
-      setError(updateError.message ?? 'Could not update your password. Please request a new reset link.')
-      return
+      setError('Could not open the sign-in page. Please try again.')
     }
-
-    finishPasswordRecovery()
-    await signOut()
-    setLoading(false)
-    setDone(true)
-  }
-
-  if (done) {
-    return (
-      <div className="login-shell">
-        <div className="login-card">
-          <div className="login-card__brand">
-            <img src={logoColor} alt="Pasifika Navigators" />
-          </div>
-          <div className="login-card__header">
-            <h1>Password updated</h1>
-            <p>Your password has been changed. You can now sign in with your new password.</p>
-          </div>
-          <div className="register-done">
-            <Link className="button button--primary login-form__submit" to="/login">
-              Go to sign in
-            </Link>
-          </div>
-        </div>
-      </div>
-    )
-  }
-
-  if (session === null) {
-    return (
-      <div className="login-shell">
-        <div className="login-card">
-          <div className="login-card__brand">
-            <img src={logoColor} alt="Pasifika Navigators" />
-          </div>
-          <div className="login-card__header">
-            <h1>Reset link unavailable</h1>
-            <p>{linkError || 'This password reset link is invalid or has expired.'}</p>
-          </div>
-          <Link className="button button--primary login-form__submit" to="/login">
-            Request a new reset link
-          </Link>
-        </div>
-      </div>
-    )
   }
 
   return (
@@ -107,63 +37,30 @@ export default function ResetPasswordPage() {
         </div>
 
         <div className="login-card__header">
-          <h1>Choose new password</h1>
+          <h1>Reset password</h1>
           <p>
-            {session
-              ? 'Enter a new password for your Pasifika Navigators account.'
-              : 'Checking your secure password reset link…'}
+            Continue to the sign-in page and choose “Forgot password?”. We will email you a code
+            so you can choose a new password.
           </p>
         </div>
 
-        <form className="login-form" onSubmit={handleSubmit} noValidate>
-          <div className="form-field">
-            <label htmlFor="reset-password">
-              New password
-              <span className="form-field__hint"> (min. {MIN_PASSWORD_LENGTH} characters)</span>
-            </label>
-            <input
-              id="reset-password"
-              type="password"
-              name="password"
-              autoComplete="new-password"
-              required
-              value={password}
-              onChange={(event) => setPassword(event.target.value)}
-              placeholder="••••••••"
-              disabled={loading || !session}
-            />
-          </div>
-
-          <div className="form-field">
-            <label htmlFor="reset-confirm-password">Confirm new password</label>
-            <input
-              id="reset-confirm-password"
-              type="password"
-              name="confirmPassword"
-              autoComplete="new-password"
-              required
-              value={confirmPassword}
-              onChange={(event) => setConfirmPassword(event.target.value)}
-              placeholder="••••••••"
-              disabled={loading || !session}
-            />
-          </div>
-
+        <div className="login-form">
           {error && (
             <p className="login-form__error" role="alert">{error}</p>
           )}
 
           <button
-            type="submit"
+            type="button"
             className="button button--primary login-form__submit"
-            disabled={loading || !session || !password || !confirmPassword}
+            onClick={handleReset}
+            disabled={loading}
           >
-            {loading ? 'Updating password…' : 'Update password'}
+            {loading ? 'Opening sign-in…' : 'Continue'}
           </button>
-        </form>
+        </div>
 
         <p className="login-card__back">
-          Need a new link? <Link to="/login">Request another reset email</Link>
+          <Link to="/login">Back to sign in</Link>
         </p>
       </div>
     </div>

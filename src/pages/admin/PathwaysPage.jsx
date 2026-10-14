@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react'
-import { supabase } from '../../lib/supabaseClient.js'
+import { apiRequest } from '../../lib/apiClient.js'
 
 const LANGUAGES = [
   'Sāmoan', 'Tongan', 'Cook Islands Māori', 'Niuean', 'Tokelauan',
@@ -29,11 +29,7 @@ export default function PathwaysPage() {
 
   const fetchPathways = async () => {
     setLoading(true)
-    const { data, error: fetchError } = await supabase
-      .from('learning_pathways')
-      .select('*')
-      .order('language', { ascending: true })
-      .order('title', { ascending: true })
+    const { data, error: fetchError } = await apiRequest('/manage/pathways')
 
     setLoading(false)
     if (fetchError) { setError('Failed to load pathways.'); return }
@@ -83,9 +79,9 @@ export default function PathwaysPage() {
     let error
 
     if (editing === 'new') {
-      ;({ error } = await supabase.from('learning_pathways').insert([payload]))
+      ;({ error } = await apiRequest('/manage/pathways', { method: 'POST', body: payload }))
     } else {
-      ;({ error } = await supabase.from('learning_pathways').update(payload).eq('id', editing.id))
+      ;({ error } = await apiRequest(`/manage/pathways/${editing.id}`, { method: 'PUT', body: payload }))
     }
 
     setSaving(false)
@@ -101,7 +97,7 @@ export default function PathwaysPage() {
 
   const confirmDelete = async () => {
     if (!deleteId) return
-    const { error } = await supabase.from('learning_pathways').delete().eq('id', deleteId)
+    const { error } = await apiRequest(`/manage/pathways/${deleteId}`, { method: 'DELETE' })
     setDeleteId(null)
     if (!error) fetchPathways()
   }

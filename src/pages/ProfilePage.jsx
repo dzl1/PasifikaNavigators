@@ -3,41 +3,49 @@ import { useNavigate } from 'react-router-dom'
 import SiteHeader from '../components/SiteHeader.jsx'
 import SiteFooter from '../components/SiteFooter.jsx'
 import { useAuth } from '../context/AuthContext.jsx'
+import { apiRequest } from '../lib/apiClient.js'
 import './ProfilePage.css'
 
-const MIN_PASSWORD_LENGTH = 8
-
 export default function ProfilePage() {
-  const { session, updateProfile, updatePassword, signOut } = useAuth()
+  const { session, signIn, signOut } = useAuth()
   const navigate = useNavigate()
-  const metadata = session?.user?.user_metadata ?? {}
 
-  const [displayName, setDisplayName] = useState(metadata.display_name ?? metadata.full_name ?? '')
-  const [profileVisible, setProfileVisible] = useState(metadata.profile_visible ?? false)
-  const [productUpdates, setProductUpdates] = useState(metadata.product_updates ?? true)
+  const [displayName, setDisplayName] = useState('')
+  const [profileVisible, setProfileVisible] = useState(false)
+  const [productUpdates, setProductUpdates] = useState(true)
   const [profileStatus, setProfileStatus] = useState({ type: '', message: '' })
+  const [loadingProfile, setLoadingProfile] = useState(true)
   const [savingProfile, setSavingProfile] = useState(false)
-
-  const [password, setPassword] = useState('')
-  const [confirmPassword, setConfirmPassword] = useState('')
-  const [passwordStatus, setPasswordStatus] = useState({ type: '', message: '' })
-  const [savingPassword, setSavingPassword] = useState(false)
+  const [resettingPassword, setResettingPassword] = useState(false)
 
   useEffect(() => {
-    setDisplayName(metadata.display_name ?? metadata.full_name ?? '')
-    setProfileVisible(metadata.profile_visible ?? false)
-    setProductUpdates(metadata.product_updates ?? true)
-  }, [session?.user?.updated_at])
+    let active = true
+    apiRequest('/profile').then(({ data, error }) => {
+      if (!active) return
+      if (error) {
+        setProfileStatus({ type: 'error', message: error.message ?? 'Could not load your settings.' })
+      } else {
+        setDisplayName(data.display_name || session?.user?.name || '')
+        setProfileVisible(data.profile_visible)
+        setProductUpdates(data.product_updates)
+      }
+      setLoadingProfile(false)
+    })
+    return () => { active = false }
+  }, [session?.user?.id])
 
   const handleProfileSave = async (event) => {
     event.preventDefault()
     setProfileStatus({ type: '', message: '' })
     setSavingProfile(true)
 
-    const { error } = await updateProfile({
-      display_name: displayName.trim(),
-      profile_visible: profileVisible,
-      product_updates: productUpdates,
+    const { error } = await apiRequest('/profile', {
+      method: 'PUT',
+      body: {
+        display_name: displayName.trim(),
+        profile_visible: profileVisible,
+        product_updates: productUpdates,
+      },
     })
 
     setSavingProfile(false)
@@ -46,31 +54,16 @@ export default function ProfilePage() {
       : { type: 'success', message: 'Your profile and privacy settings have been saved.' })
   }
 
-  const handlePasswordSave = async (event) => {
-    event.preventDefault()
-    setPasswordStatus({ type: '', message: '' })
-
-    if (password.length < MIN_PASSWORD_LENGTH) {
-      setPasswordStatus({ type: 'error', message: `Password must be at least ${MIN_PASSWORD_LENGTH} characters.` })
-      return
+  // Passwords are managed by Microsoft Entra; its sign-in page offers
+  // "Forgot password?" which emails a one-time code.
+  const handlePasswordReset = async () => {
+    setResettingPassword(true)
+    try {
+      await signIn({ from: '/profile', loginHint: session?.user?.email || undefined })
+    } catch (error) {
+      console.error('Sign-in error:', error)
+      setResettingPassword(false)
     }
-    if (password !== confirmPassword) {
-      setPasswordStatus({ type: 'error', message: 'Passwords do not match.' })
-      return
-    }
-
-    setSavingPassword(true)
-    const { error } = await updatePassword(password)
-    setSavingPassword(false)
-
-    if (error) {
-      setPasswordStatus({ type: 'error', message: error.message ?? 'Could not update your password.' })
-      return
-    }
-
-    setPassword('')
-    setConfirmPassword('')
-    setPasswordStatus({ type: 'success', message: 'Your password has been updated.' })
   }
 
   const handleSignOut = async () => {
@@ -110,7 +103,7 @@ export default function ProfilePage() {
                   maxLength={80}
                   autoComplete="name"
                   placeholder="How you would like to be known"
-                  disabled={savingProfile}
+                  disabled={savingProfile || loadingProfile}
                 />
               </div>
 
@@ -128,7 +121,7 @@ export default function ProfilePage() {
                   type="checkbox"
                   checked={profileVisible}
                   onChange={(event) => setProfileVisible(event.target.checked)}
-                  disabled={savingProfile}
+                  disabled={savingProfile || loadingProfile}
                 />
               </label>
               <label className="settings-toggle">
@@ -140,7 +133,7 @@ export default function ProfilePage() {
                   type="checkbox"
                   checked={productUpdates}
                   onChange={(event) => setProductUpdates(event.target.checked)}
-                  disabled={savingProfile}
+                  disabled={savingProfile || loadingProfile}
                 />
               </label>
 
@@ -149,7 +142,7 @@ export default function ProfilePage() {
                   {profileStatus.message}
                 </p>
               )}
-              <button className="button button--primary settings-submit" type="submit" disabled={savingProfile}>
+              <button className="button button--primary settings-submit" type="submit" disabled={savingProfile || loadingProfile}>
                 {savingProfile ? 'Saving…' : 'Save settings'}
               </button>
             </form>
@@ -158,46 +151,22 @@ export default function ProfilePage() {
           <section className="settings-card" aria-labelledby="security-heading">
             <div className="settings-card__heading">
               <h2 id="security-heading">Security</h2>
-              <p>Use a unique password with at least {MIN_PASSWORD_LENGTH} characters.</p>
+              <p>Your password is managed by our secure Microsoft sign-in service.</p>
             </div>
-            <form className="settings-form" onSubmit={handlePasswordSave}>
-              <div className="form-field">
-                <label htmlFor="profile-password">New password</label>
-                <input
-                  id="profile-password"
-                  type="password"
-                  autoComplete="new-password"
-                  value={password}
-                  onChange={(event) => setPassword(event.target.value)}
-                  placeholder="••••••••"
-                  disabled={savingPassword}
-                />
-              </div>
-              <div className="form-field">
-                <label htmlFor="profile-password-confirm">Confirm new password</label>
-                <input
-                  id="profile-password-confirm"
-                  type="password"
-                  autoComplete="new-password"
-                  value={confirmPassword}
-                  onChange={(event) => setConfirmPassword(event.target.value)}
-                  placeholder="••••••••"
-                  disabled={savingPassword}
-                />
-              </div>
-              {passwordStatus.message && (
-                <p className={`settings-status settings-status--${passwordStatus.type}`} role="status">
-                  {passwordStatus.message}
-                </p>
-              )}
+            <div className="settings-form">
+              <p className="settings-field-help">
+                To change your password, continue to the sign-in page and choose “Forgot password?”.
+                We will email you a code so you can set a new one.
+              </p>
               <button
                 className="button button--primary settings-submit"
-                type="submit"
-                disabled={savingPassword || !password || !confirmPassword}
+                type="button"
+                onClick={handlePasswordReset}
+                disabled={resettingPassword}
               >
-                {savingPassword ? 'Updating…' : 'Update password'}
+                {resettingPassword ? 'Opening sign-in…' : 'Change password'}
               </button>
-            </form>
+            </div>
 
             <div className="settings-divider" />
             <div className="settings-signout">

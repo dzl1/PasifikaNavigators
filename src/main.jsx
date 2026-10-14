@@ -2,6 +2,7 @@ import React from 'react'
 import ReactDOM from 'react-dom/client'
 import { BrowserRouter, useLocation } from 'react-router-dom'
 import App from './App.jsx'
+import { initializeMsal } from './lib/msal.js'
 import './index.css'
 
 function ScrollToTop() {
@@ -22,11 +23,17 @@ function ScrollToTop() {
   return null
 }
 
-ReactDOM.createRoot(document.getElementById('root')).render(
-  <React.StrictMode>
-    <BrowserRouter>
-      <ScrollToTop />
-      <App />
-    </BrowserRouter>
-  </React.StrictMode>,
-)
+function render() {
+  ReactDOM.createRoot(document.getElementById('root')).render(
+    <React.StrictMode>
+      <BrowserRouter>
+        <ScrollToTop />
+        <App />
+      </BrowserRouter>
+    </React.StrictMode>,
+  )
+}
+
+initializeMsal()
+  .catch((error) => console.error('Sign-in initialisation failed:', error))
+  .finally(render)

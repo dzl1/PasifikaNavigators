@@ -1,0 +1,15 @@
+{
+  "IsEncrypted": false,
+  "Values": {
+    "FUNCTIONS_WORKER_RUNTIME": "node",
+    "AzureWebJobsStorage": "",
+    "DATABASE_URL": "postgres://pnadmin:<password>@<server-name>.postgres.database.azure.com:5432/pasifika",
+    "ENTRA_AUTHORITY": "https://<tenant-subdomain>.ciamlogin.com/<tenant-id>",
+    "ENTRA_API_AUDIENCE": "<application-client-id>",
+    "ADMIN_EMAILS": "dave@pasifikanavigators.nz"
+  },
+  "Host": {
+    "CORS": "http://localhost:5173",
+    "CORSCredentials": false
+  }
+}

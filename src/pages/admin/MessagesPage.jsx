@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react'
-import { isSupabaseConfigured, supabase } from '../../lib/supabaseClient.js'
+import { apiRequest } from '../../lib/apiClient.js'
 
 const PAGE_SIZE = 20
 
@@ -18,43 +18,22 @@ export default function MessagesPage() {
     setLoading(true)
     setError('')
 
-    if (!isSupabaseConfigured) {
-      setLoading(false)
-      setError('Authentication/database access is not configured yet.')
-      return
-    }
-
-    const from = currentPage * PAGE_SIZE
-    const to = from + PAGE_SIZE - 1
     const showHidden = currentView === 'hidden'
+    const query = new URLSearchParams({ hidden: String(showHidden), page: String(currentPage), pageSize: String(PAGE_SIZE) })
 
-    const { data, count, error: fetchError } = await supabase
-      .from('contact_messages')
-      .select('*', { count: 'exact' })
-      .eq('is_hidden', showHidden)
-      .order('created_at', { ascending: false })
-      .range(from, to)
+    const { data, error: fetchError } = await apiRequest(`/manage/messages?${query}`)
 
     setLoading(false)
 
     if (fetchError) {
-      console.error('Supabase error (contact_messages select):', fetchError)
-      const setupHint = fetchError.code === '42P01'
-        ? ' The contact_messages table may not exist yet. Run supabase/contact_messages.sql in your Supabase SQL editor.'
-        : ''
-      const columnHint = fetchError.code === '42703'
-        ? ' The message status columns may be missing. Re-run the updated supabase/contact_messages.sql file in your Supabase SQL editor.'
-        : ''
-      const permissionHint = fetchError.code === '42501'
-        ? ' The admin read policy or table grant is missing. Re-run the updated supabase/contact_messages.sql file in your Supabase SQL editor.'
-        : ''
-      setError(`Failed to load messages: ${fetchError.message} (code: ${fetchError.code}).${setupHint}${columnHint}${permissionHint}`)
+      console.error('API error (messages list):', fetchError)
+      setError(`Failed to load messages: ${fetchError.message}`)
       return
     }
 
-    const nextMessages = data ?? []
+    const nextMessages = data?.items ?? []
     setMessages(nextMessages)
-    setTotal(count ?? 0)
+    setTotal(data?.total ?? 0)
     setSelected((current) => {
       if (current && nextMessages.some((message) => message.id === current.id)) {
         return current
@@ -80,18 +59,13 @@ export default function MessagesPage() {
     setProcessingId(message.id)
     setError('')
 
-    const { data, error: updateError } = await supabase
-      .from('contact_messages')
-      .update(values)
-      .eq('id', message.id)
-      .select()
-      .single()
+    const { data, error: updateError } = await apiRequest(`/manage/messages/${message.id}`, { method: 'PATCH', body: values })
 
     setProcessingId(null)
 
     if (updateError) {
-      console.error('Supabase error (contact_messages update):', updateError)
-      setError(`Failed to update message: ${updateError.message} (code: ${updateError.code}). Re-run supabase/contact_messages.sql if admin update access is missing.`)
+      console.error('API error (message update):', updateError)
+      setError(`Failed to update message: ${updateError.message}`)
       return
     }
 
@@ -113,17 +87,14 @@ export default function MessagesPage() {
     setProcessingId(deleteId)
     setError('')
 
-    const { error: deleteError } = await supabase
-      .from('contact_messages')
-      .delete()
-      .eq('id', deleteId)
+    const { error: deleteError } = await apiRequest(`/manage/messages/${deleteId}`, { method: 'DELETE' })
 
     setProcessingId(null)
     setDeleteId(null)
 
     if (deleteError) {
-      console.error('Supabase error (contact_messages delete):', deleteError)
-      setError(`Failed to delete message: ${deleteError.message} (code: ${deleteError.code}). Re-run supabase/contact_messages.sql if admin delete access is missing.`)
+      console.error('API error (message delete):', deleteError)
+      setError(`Failed to delete message: ${deleteError.message}`)
       return
     }
 
