@@ -19,23 +19,27 @@ Do the steps in order. Each one produces values that later steps need.
 
 ```sh
 az login
-az group create --name pasifika-rg --location australiaeast
+az group create --name pasifika-rg --location newzealandnorth
 ```
 
 ## 2. PostgreSQL database
 
+> **Done (15 Oct 2026):** `pasifika-navigators-db` in New Zealand North, database
+> `pasifika`, schema applied. The connection string is in `api/local.settings.json`,
+> which is not committed.
+
 ```sh
 az postgres flexible-server create \
   --resource-group pasifika-rg \
-  --name pasifika-db \
-  --location australiaeast \
+  --name pasifika-navigators-db \
+  --location newzealandnorth \
   --tier Burstable --sku-name Standard_B1ms \
   --storage-size 32 --version 16 \
   --admin-user pnadmin --admin-password '<strong-password>' \
-  --public-access 0.0.0.0     # allows Azure services, such as the Function App
+  --public-access 0.0.0.0 --yes   # allows Azure services, such as the Function App
 
 az postgres flexible-server db create \
-  --resource-group pasifika-rg --server-name pasifika-db --database-name pasifika
+  --resource-group pasifika-rg --server-name pasifika-navigators-db --name pasifika
 ```
 
 To run the schema from your machine, first allow your IP address through the
@@ -43,15 +47,15 @@ firewall:
 
 ```sh
 az postgres flexible-server firewall-rule create \
-  --resource-group pasifika-rg --name pasifika-db \
-  --rule-name my-laptop --start-ip-address <your-ip> --end-ip-address <your-ip>
+  --resource-group pasifika-rg --server-name pasifika-navigators-db \
+  --name my-laptop --start-ip-address <your-ip> --end-ip-address <your-ip>
 
-psql "postgres://pnadmin:<password>@pasifika-db.postgres.database.azure.com:5432/pasifika?sslmode=require" \
+psql "postgres://pnadmin:<password>@pasifika-navigators-db.postgres.database.azure.com:5432/pasifika?sslmode=require" \
   -f db/schema.sql
 ```
 
 You'll use this connection string as `DATABASE_URL` in step 4:
-`postgres://pnadmin:<password>@pasifika-db.postgres.database.azure.com:5432/pasifika`
+`postgres://pnadmin:<password>@pasifika-navigators-db.postgres.database.azure.com:5432/pasifika`
 URL-encode any special characters in the password.
 
 ## 3. Microsoft Entra External ID (accounts)
@@ -103,15 +107,15 @@ called `Admin` and assign it to users. The API accepts either.
 
 ```sh
 az storage account create --name pasifikafuncstore --resource-group pasifika-rg \
-  --location australiaeast --sku Standard_LRS
+  --location newzealandnorth --sku Standard_LRS
 
 az functionapp create --resource-group pasifika-rg --name pasifika-api \
   --storage-account pasifikafuncstore \
-  --flexconsumption-location australiaeast \
+  --flexconsumption-location newzealandnorth \
   --runtime node --runtime-version 20
 
 az functionapp config appsettings set --resource-group pasifika-rg --name pasifika-api --settings \
-  DATABASE_URL='postgres://pnadmin:<password>@pasifika-db.postgres.database.azure.com:5432/pasifika' \
+  DATABASE_URL='postgres://pnadmin:<password>@pasifika-navigators-db.postgres.database.azure.com:5432/pasifika' \
   ENTRA_AUTHORITY='https://<tenant-subdomain>.ciamlogin.com/<tenant-id>' \
   ENTRA_API_AUDIENCE='<client-id>' \
   ADMIN_EMAILS='dave@pasifikanavigators.nz'
