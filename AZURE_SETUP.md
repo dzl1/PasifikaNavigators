@@ -11,7 +11,28 @@ The site runs on three Azure services:
 The React frontend can stay on Vercel. It calls the Function App over HTTPS
 with an Entra access token. The browser never connects to the database.
 
-Do the steps in order. Each one produces values that later steps need.
+## What's provisioned (16 Oct 2026)
+
+| Resource | Name / value |
+| --- | --- |
+| Resource group | `pasifika-rg` (New Zealand North), subscription "Azure subscription 1" |
+| PostgreSQL | `pasifika-navigators-db.postgres.database.azure.com`, database `pasifika` |
+| Function App | `https://pasifika-navigators-api.azurewebsites.net/api` (Flex Consumption) |
+| Entra External ID tenant | `8b3ff6c6-3517-4dde-850e-c8b0dce15e86` |
+| App registration | "Pasifika Navigators Web", client ID `7f5c02ba-1036-4b50-9a1d-e140ca634162` |
+| User flow | "Pasifika Navigators sign up and sign in" (email + password) |
+| Vercel | `VITE_*` variables set for Production and Development |
+
+The authority uses the tenant ID form:
+`https://8b3ff6c6-3517-4dde-850e-c8b0dce15e86.ciamlogin.com/8b3ff6c6-3517-4dde-850e-c8b0dce15e86`.
+
+**Redeploying the API.** Security defaults on the main tenant block the
+Functions deploy endpoint unless you've signed in with MFA recently. Running
+`func azure functionapp publish pasifika-navigators-api` after `az login` works.
+Alternatively, upload a zip to the app's deployment container and call ARM's
+`extensions/onedeploy` with its SAS URL.
+
+The steps below show how everything was set up from scratch, in order.
 
 ---
 
